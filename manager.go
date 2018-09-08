@@ -22,8 +22,11 @@ type CacheManager struct {
 }
 
 // New a cache manager instance
-func New(driverName string) *CacheManager {
-	return &CacheManager{defName: driverName}
+func New() *CacheManager {
+	return &CacheManager{
+		// defName: driverName,
+		drivers: make(map[string]CacheFace),
+	}
 }
 
 // SetDefName set default driver name
@@ -31,8 +34,8 @@ func (m *CacheManager) SetDefName(driverName string) {
 	m.defName = driverName
 }
 
-// add new driver object
-func (m *CacheManager) Add(name string, driver CacheFace) *CacheManager {
+// Register new driver object
+func (m *CacheManager) Register(name string, driver CacheFace) *CacheManager {
 	m.drivers[name] = driver
 	return m
 }

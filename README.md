@@ -9,6 +9,13 @@ Drivers:
 - memory
 - memCached
 
+## Usage
+
+
+### Redis
+
+
+
 ## Interface
 
 ```go
@@ -17,7 +24,7 @@ type CacheFace interface {
 	// basic op
 	Has(key string) bool
 	Get(key string) interface{}
-	Set(key string, v interface{}, ttl time.Duration) error
+	Set(key string, val interface{}, ttl time.Duration) error
 	Del(key string) error
 	// multi op
 	GetMulti(keys []string) []interface{}

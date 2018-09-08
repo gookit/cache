@@ -10,7 +10,7 @@ type CacheFace interface {
 	// basic op
 	Has(key string) bool
 	Get(key string) interface{}
-	Set(key string, v interface{}, ttl time.Duration) error
+	Set(key string, val interface{}, ttl time.Duration) error
 	Del(key string) error
 	// multi op
 	GetMulti(keys []string) []interface{}
@@ -34,12 +34,12 @@ var (
  *************************************************************/
 
 // default cache driver manager instance
-var manager = &CacheManager{}
+var manager = New()
 
-// Init default manager instance
-func Init(name string, driver CacheFace) *CacheManager {
+// Register driver to manager instance
+func Register(name string, driver CacheFace) *CacheManager {
 	manager.SetDefName(name)
-	manager.Add(name, driver)
+	manager.Register(name, driver)
 	return manager
 }
 
@@ -78,8 +78,8 @@ func Get(key string) interface{} {
 }
 
 // Set value by key
-func Set(key string, v interface{}, ttl time.Duration) error {
-	return manager.Default().Set(key, v, ttl)
+func Set(key string, val interface{}, ttl time.Duration) error {
+	return manager.Default().Set(key, val, ttl)
 }
 
 // Del value by key
