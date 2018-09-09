@@ -27,7 +27,7 @@ func Example() {
 	fmt.Print(val)
 }
 
-func Example_MemoryCache() {
+func ExampleMemoryCache() {
 	c := NewMemoryCache()
 	key := "name"
 
@@ -49,7 +49,7 @@ func Example_MemoryCache() {
 	// false 0
 }
 
-func Example_FileCache() {
+func ExampleFileCache() {
 	c := NewFileCache("./testdata")
 	key := "name"
 
