@@ -52,16 +52,16 @@ func main() {
 ## Interface
 
 ```go
-// CacheFace interface definition
-type CacheFace interface {
+// Cache interface definition
+type Cache interface {
 	// basic op
 	Has(key string) bool
 	Get(key string) interface{}
-	Set(key string, val interface{}, ttl time.Duration) error
+	Set(key string, val interface{}, ttl time.Duration) (err error)
 	Del(key string) error
 	// multi op
-	GetMulti(keys []string) []interface{}
-	SetMulti(mv map[string]interface{}, ttl time.Duration) error
+	GetMulti(keys []string) map[string]interface{}
+	SetMulti(values map[string]interface{}, ttl time.Duration) (err error)
 	DelMulti(keys []string) error
 	// clear
 	Clear() error

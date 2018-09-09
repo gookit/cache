@@ -8,8 +8,8 @@ import (
 	"time"
 )
 
-// CacheFace interface definition
-type CacheFace interface {
+// Cache interface definition
+type Cache interface {
 	// basic op
 	Has(key string) bool
 	Get(key string) interface{}
@@ -74,33 +74,33 @@ var (
  *************************************************************/
 
 // default cache driver manager instance
-var manager = NewManager()
+var defMgr = NewManager()
 
 // Register driver to manager instance
-func Register(name string, driver CacheFace) *CacheManager {
-	manager.SetDefName(name)
-	manager.Register(name, driver)
-	return manager
+func Register(name string, driver Cache) *Manager {
+	defMgr.SetDefName(name)
+	defMgr.Register(name, driver)
+	return defMgr
 }
 
 // SetDefName set default driver name
 func SetDefName(driverName string) {
-	manager.SetDefName(driverName)
+	defMgr.SetDefName(driverName)
 }
 
 // Use returns a driver instance
-func Use(driverName string) CacheFace {
-	return manager.drivers[driverName]
+func Use(driverName string) Cache {
+	return defMgr.drivers[driverName]
 }
 
-// Manager get default cache manager instance
-func Manager() *CacheManager {
-	return manager
+// DefMgr get default cache manager instance
+func DefMgr() *Manager {
+	return defMgr
 }
 
 // Default get default cache driver instance
-func Default() CacheFace {
-	return manager.Default()
+func Default() Cache {
+	return defMgr.Default()
 }
 
 /*************************************************************
@@ -109,40 +109,40 @@ func Default() CacheFace {
 
 // Has cache key
 func Has(key string) bool {
-	return manager.Default().Has(key)
+	return defMgr.Default().Has(key)
 }
 
 // Get value by key
 func Get(key string) interface{} {
-	return manager.Default().Get(key)
+	return defMgr.Default().Get(key)
 }
 
 // Set value by key
 func Set(key string, val interface{}, ttl time.Duration) error {
-	return manager.Default().Set(key, val, ttl)
+	return defMgr.Default().Set(key, val, ttl)
 }
 
 // Del value by key
 func Del(key string) error {
-	return manager.Default().Del(key)
+	return defMgr.Default().Del(key)
 }
 
 // GetMulti values by keys
-func GetMulti(keys []string) []interface{} {
-	return manager.Default().GetMulti(keys)
+func GetMulti(keys []string) map[string]interface{} {
+	return defMgr.Default().GetMulti(keys)
 }
 
 // SetMulti values
 func SetMulti(mv map[string]interface{}, ttl time.Duration) error {
-	return manager.Default().SetMulti(mv, ttl)
+	return defMgr.Default().SetMulti(mv, ttl)
 }
 
 // DelMulti values by keys
 func DelMulti(keys []string) error {
-	return manager.Default().DelMulti(keys)
+	return defMgr.Default().DelMulti(keys)
 }
 
 // Clear all caches
 func Clear() error {
-	return manager.Default().Clear()
+	return defMgr.Default().Clear()
 }

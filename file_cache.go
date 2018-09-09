@@ -31,7 +31,7 @@ func NewFileCache(dir string, pfxAndKey ...string) *FileCache {
 	c := &FileCache{
 		cacheDir: dir,
 		// init a memory cache.
-		MemoryCache: MemoryCache{caches: make(map[string]*CacheItem)},
+		MemoryCache: MemoryCache{caches: make(map[string]*Item)},
 	}
 
 	if ln := len(pfxAndKey); ln > 0 {
@@ -73,7 +73,7 @@ func (c *FileCache) Get(key string) interface{} {
 		return nil
 	}
 
-	item := &CacheItem{}
+	item := &Item{}
 	if err = Unmarshal(bs, item); err != nil {
 		c.lastErr = err
 		return nil

@@ -171,7 +171,7 @@ func (c *RedisCache) String() string {
  * helper methods
  *************************************************************/
 
-// Driver object get
+// Pool get
 func (c *RedisCache) Pool() *redis.Pool {
 	return c.pool
 }

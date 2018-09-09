@@ -6,8 +6,6 @@ func Example() {
 	// init  driver
 	c := Connect("127.0.0.1:6379", "", 0)
 
-	// usage
-	//
 	// set
 	c.Set("name", "cache value", 60)
 	// get

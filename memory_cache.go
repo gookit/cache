@@ -10,13 +10,13 @@ type MemoryCache struct {
 	// locker
 	lock sync.RWMutex
 	// cache data in memory
-	caches map[string]*CacheItem
+	caches map[string]*Item
 	// last error
 	lastErr error
 }
 
-// CacheItem for memory cache
-type CacheItem struct {
+// Item for memory cache
+type Item struct {
 	// Exp expire time
 	Exp int64
 	// Val cache value storage
@@ -26,7 +26,7 @@ type CacheItem struct {
 // NewMemoryCache create a memory cache instance
 func NewMemoryCache() *MemoryCache {
 	return &MemoryCache{
-		caches: make(map[string]*CacheItem),
+		caches: make(map[string]*Item),
 	}
 }
 
@@ -62,7 +62,7 @@ func (c *MemoryCache) Set(key string, val interface{}, ttl time.Duration) (err e
 	c.lock.Lock()
 	defer c.lock.Unlock()
 
-	item := &CacheItem{Val: val}
+	item := &Item{Val: val}
 	if ttl > 0 {
 		item.Exp = time.Now().Unix() + int64(ttl/time.Second)
 	}
