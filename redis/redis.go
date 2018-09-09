@@ -1,3 +1,5 @@
+// Package redis is a simple redis cache implement.
+// base on the package: github.com/garyburd/redigo
 package redis
 
 import (

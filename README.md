@@ -11,10 +11,37 @@ Drivers:
 
 ## Usage
 
+```go
+package main
 
-### Redis
+import (
+	"fmt"
+	"github.com/gookit/cache"
+	"github.com/gookit/cache/redis"
+)
 
+func main() {
+	// register one(or some) cache driver
+	cache.Register(cache.DvrFile, cache.NewFileCache(""))
+	cache.Register(cache.DvrMemory, cache.NewMemoryCache())
+	cache.Register(cache.DvrRedis, redis.Connect("127.0.0.1:6379", "", 0))
+	
+	// setting default driver name
+	cache.SetDefName(cache.DvrRedis)
 
+	// quick use.(it is default driver)
+	//
+	// set
+	cache.Set("name", "cache value", cache.TwoMinutes)
+	// get
+	val := cache.Get("name")
+	// del
+	cache.Del("name")
+
+	// get: "cache value"
+	fmt.Print(val)
+}
+```
 
 ## Interface
 

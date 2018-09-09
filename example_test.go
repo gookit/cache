@@ -5,12 +5,16 @@ import (
 	"github.com/gookit/cache/redis"
 )
 
-func Example_Redis() {
-	// init a driver
-	SetDefName(DvrRedis)
+func Example() {
+	// register some cache driver
+	Register(DvrFile, NewFileCache(""))
+	Register(DvrMemory, NewMemoryCache())
 	Register(DvrRedis, redis.Connect("127.0.0.1:6379", "", 0))
 
-	// usage
+	// setting default driver name
+	SetDefName(DvrRedis)
+
+	// quick use.(it is default driver)
 	//
 	// set
 	Set("name", "cache value", TwoMinutes)
@@ -21,4 +25,48 @@ func Example_Redis() {
 
 	// get: "cache value"
 	fmt.Print(val)
+}
+
+func Example_MemoryCache() {
+	c := NewMemoryCache()
+	key := "name"
+
+	// set
+	c.Set(key, "cache value", TwoMinutes)
+	fmt.Println(c.Has(key), c.Count())
+
+	// get
+	val := c.Get(key)
+	fmt.Println(val)
+
+	// del
+	c.Del(key)
+	fmt.Println(c.Has(key), c.Count())
+
+	// Output:
+	// true 1
+	// cache value
+	// false 0
+}
+
+func Example_FileCache() {
+	c := NewFileCache("./testdata")
+	key := "name"
+
+	// set
+	c.Set(key, "cache value", TwoMinutes)
+	fmt.Println(c.Has(key))
+
+	// get
+	val := c.Get(key)
+	fmt.Println(val)
+
+	// del
+	c.Del(key)
+	fmt.Println(c.Has(key))
+
+	// Output:
+	// true
+	// cache value
+	// false
 }

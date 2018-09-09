@@ -21,8 +21,8 @@ type CacheManager struct {
 	drivers map[string]CacheFace
 }
 
-// New a cache manager instance
-func New() *CacheManager {
+// NewManager create a cache manager instance
+func NewManager() *CacheManager {
 	return &CacheManager{
 		// defName: driverName,
 		drivers: make(map[string]CacheFace),
