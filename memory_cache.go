@@ -1,4 +1,3 @@
-// Package memory is a simple memory cache implement.
 package cache
 
 import (
@@ -31,13 +30,11 @@ func NewMemoryCache() *MemoryCache {
 	}
 }
 
-// NewCacheItem create
-func NewCacheItem(val interface{}) *CacheItem {
-	return &CacheItem{Val: val}
-}
-
 // Has cache key
 func (c *MemoryCache) Has(key string) bool {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+
 	_, ok := c.caches[key]
 	return ok
 }
@@ -76,8 +73,8 @@ func (c *MemoryCache) Set(key string, val interface{}, ttl time.Duration) (err e
 
 // Del cache by key
 func (c *MemoryCache) Del(key string) error {
-	// c.lock.Lock()
-	// defer c.lock.Unlock()
+	c.lock.RLock()
+	defer c.lock.RUnlock()
 
 	if _, ok := c.caches[key]; ok {
 		delete(c.caches, key)
@@ -87,10 +84,10 @@ func (c *MemoryCache) Del(key string) error {
 }
 
 // GetMulti values by multi key
-func (c *MemoryCache) GetMulti(keys []string) []interface{} {
-	var values []interface{}
+func (c *MemoryCache) GetMulti(keys []string) map[string]interface{} {
+	values := make(map[string]interface{}, len(keys))
 	for _, key := range keys {
-		values = append(values, c.Get(key))
+		values[key] = c.Get(key)
 	}
 
 	return values

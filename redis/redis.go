@@ -92,7 +92,7 @@ func (c *RedisCache) Has(key string) bool {
 }
 
 // GetMulti values by keys
-func (c *RedisCache) GetMulti(keys []string) []interface{} {
+func (c *RedisCache) GetMulti(keys []string) map[string]interface{} {
 	conn := c.pool.Get()
 	defer conn.Close()
 
@@ -101,10 +101,15 @@ func (c *RedisCache) GetMulti(keys []string) []interface{} {
 		args = append(args, c.Key(key))
 	}
 
-	values, err := redis.Values(conn.Do("MGet", args...))
+	list, err := redis.Values(conn.Do("MGet", args...))
 	if err != nil {
 		c.lastErr = err
 		return nil
+	}
+
+	values := make(map[string]interface{}, len(keys))
+	for i, val := range list {
+		values[keys[i]] = val
 	}
 
 	return values
@@ -115,9 +120,9 @@ func (c *RedisCache) SetMulti(values map[string]interface{}, ttl time.Duration) 
 	conn := c.pool.Get()
 	defer conn.Close()
 
-	ttlSec := int64(ttl / time.Second)
 	// open multi
 	conn.Send("Multi")
+	ttlSec := int64(ttl / time.Second)
 
 	for key, val := range values {
 		// bs, _ := cache.Marshal(val)

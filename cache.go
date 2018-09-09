@@ -1,3 +1,6 @@
+// Package cache is a generic cache use and cache manager for golang.
+// FileCache is a simple local file system cache implement.
+// MemoryCache is a simple memory cache implement.
 package cache
 
 import (
@@ -13,7 +16,7 @@ type CacheFace interface {
 	Set(key string, val interface{}, ttl time.Duration) (err error)
 	Del(key string) error
 	// multi op
-	GetMulti(keys []string) []interface{}
+	GetMulti(keys []string) map[string]interface{}
 	SetMulti(values map[string]interface{}, ttl time.Duration) (err error)
 	DelMulti(keys []string) error
 	// clear
@@ -54,7 +57,10 @@ const (
 	OneWeek = 604800 * time.Second
 )
 
+// MarshalFunc define
 type MarshalFunc func(v interface{}) ([]byte, error)
+
+// UnmarshalFunc define
 type UnmarshalFunc func(data []byte, v interface{}) error
 
 // data (Un)marshal func

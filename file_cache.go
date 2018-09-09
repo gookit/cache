@@ -1,4 +1,3 @@
-// Package file is a simple local file system cache implement.
 package cache
 
 import (
@@ -23,7 +22,7 @@ type FileCache struct {
 	securityKey string
 }
 
-// New a FileCache instance
+// NewFileCache create a FileCache instance
 func NewFileCache(dir string, pfxAndKey ...string) *FileCache {
 	if dir == "" { // empty, use system tmp dir
 		dir = os.TempDir()
@@ -57,6 +56,7 @@ func (c *FileCache) Has(key string) bool {
 	return fileExists(path)
 }
 
+// Get value by key
 func (c *FileCache) Get(key string) interface{} {
 	// read cache from memory
 	if val := c.MemoryCache.Get(key); val != nil {
@@ -90,6 +90,7 @@ func (c *FileCache) Get(key string) interface{} {
 	return nil
 }
 
+// Set value by key
 func (c *FileCache) Set(key string, val interface{}, ttl time.Duration) (err error) {
 	if err = c.MemoryCache.Set(key, val, ttl); err != nil {
 		c.lastErr = err
@@ -130,6 +131,9 @@ func (c *FileCache) Set(key string, val interface{}, ttl time.Duration) (err err
 func (c *FileCache) Del(key string) error {
 	c.MemoryCache.Del(key)
 
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+
 	file := c.GetFilename(key)
 	if fileExists(file) {
 		return os.Remove(file)
@@ -139,10 +143,10 @@ func (c *FileCache) Del(key string) error {
 }
 
 // GetMulti values by multi key
-func (c *FileCache) GetMulti(keys []string) []interface{} {
-	var values []interface{}
+func (c *FileCache) GetMulti(keys []string) map[string]interface{} {
+	values := make(map[string]interface{}, len(keys))
 	for _, key := range keys {
-		values = append(values, c.Get(key))
+		values[key] = c.Get(key)
 	}
 
 	return values
@@ -170,9 +174,7 @@ func (c *FileCache) DelMulti(keys []string) error {
 // Clear caches and files
 func (c *FileCache) Clear() error {
 	for key := range c.caches {
-		file := c.GetFilename(key)
-
-		if fileExists(file) {
+		if file := c.GetFilename(key); fileExists(file) {
 			err := os.Remove(file)
 			if err != nil {
 				return err
