@@ -14,10 +14,10 @@ const (
 
 // CacheManager definition
 type CacheManager struct {
-	Debug bool
+	// Debug bool
 	// default driver name
 	defName string
-	// drivers
+	// drivers map
 	drivers map[string]CacheFace
 }
 

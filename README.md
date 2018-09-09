@@ -1,6 +1,6 @@
 # cache
 
-generic cache use and cache manager for golang.
+Generic cache use and cache manager for golang.
 
 Drivers:
 
@@ -8,6 +8,12 @@ Drivers:
 - redis
 - memory
 - memCached
+
+## Godoc
+
+- [doc on gowalker](https://gowalker.org/github.com/gookit/cache)
+- [godoc for gopkg](https://godoc.org/gopkg.in/gookit/cache.v1)
+- [godoc for github](https://godoc.org/github.com/gookit/cache)
 
 ## Usage
 
