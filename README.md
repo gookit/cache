@@ -8,6 +8,7 @@ Drivers:
 - redis
 - memory
 - memCached
+- buntdb [tidwall/buntdb](https://github.com/tidwall/buntdb)
 
 ## Godoc
 

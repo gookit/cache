@@ -32,17 +32,15 @@ func NewMemoryCache() *MemoryCache {
 
 // Has cache key
 func (c *MemoryCache) Has(key string) bool {
-	c.lock.RLock()
-	defer c.lock.RUnlock()
-
+	// c.lock.RLock()
 	_, ok := c.caches[key]
+	// c.lock.RUnlock()
 	return ok
 }
 
 // Get cache value by key
 func (c *MemoryCache) Get(key string) interface{} {
 	c.lock.RLock()
-	defer c.lock.RUnlock()
 
 	if item, ok := c.caches[key]; ok {
 		// check expire time
@@ -54,13 +52,13 @@ func (c *MemoryCache) Get(key string) interface{} {
 		c.Del(key)
 	}
 
+	c.lock.RUnlock()
 	return nil
 }
 
 // Set cache value by key
 func (c *MemoryCache) Set(key string, val interface{}, ttl time.Duration) (err error) {
 	c.lock.Lock()
-	defer c.lock.Unlock()
 
 	item := &Item{Val: val}
 	if ttl > 0 {
@@ -68,18 +66,20 @@ func (c *MemoryCache) Set(key string, val interface{}, ttl time.Duration) (err e
 	}
 
 	c.caches[key] = item
+	c.lock.Unlock()
+
 	return
 }
 
 // Del cache by key
 func (c *MemoryCache) Del(key string) error {
 	c.lock.RLock()
-	defer c.lock.RUnlock()
 
 	if _, ok := c.caches[key]; ok {
 		delete(c.caches, key)
 	}
 
+	c.lock.RUnlock()
 	return nil
 }
 

@@ -11,7 +11,9 @@ import (
 // Cache interface definition
 type Cache interface {
 	// basic op
+	// Has cache key
 	Has(key string) bool
+	// Get value by key
 	Get(key string) interface{}
 	Set(key string, val interface{}, ttl time.Duration) (err error)
 	Del(key string) error
