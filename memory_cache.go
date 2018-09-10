@@ -123,6 +123,16 @@ func (c *MemoryCache) Count() int {
 	return len(c.caches)
 }
 
+// Restore DB from a file
+func (c *MemoryCache) Restore(file string) error {
+	return nil
+}
+
+// DumpDB to a file
+func (c *MemoryCache) DumpDB(file string) error {
+	return nil
+}
+
 // LastErr get
 func (c *MemoryCache) LastErr() error {
 	return c.lastErr
