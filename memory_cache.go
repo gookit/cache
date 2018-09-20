@@ -9,7 +9,7 @@ import (
 type MemoryCache struct {
 	// locker
 	lock sync.RWMutex
-	// cache data in memory
+	// cache data in memory. or use sync.Map
 	caches map[string]*Item
 	// last error
 	lastErr error
@@ -130,6 +130,12 @@ func (c *MemoryCache) Restore(file string) error {
 
 // DumpDB to a file
 func (c *MemoryCache) DumpDB(file string) error {
+
+	return nil
+}
+
+// DumpDB iteration all caches
+func (c *MemoryCache) Iter(file string) error {
 	return nil
 }
 

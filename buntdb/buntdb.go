@@ -2,6 +2,8 @@
 package buntdb
 
 import (
+	"bytes"
+	"encoding/gob"
 	"github.com/tidwall/buntdb"
 	"time"
 )
@@ -11,7 +13,7 @@ const Memory = ":memory:"
 
 // BuntDB definition.
 type BuntDB struct {
-	// db file path. 
+	// db file path. eg "path/to/my.db"
 	file string
 	// db instance
 	db *buntdb.DB
@@ -24,6 +26,10 @@ func NewMemory() *BuntDB {
 
 // New a BuntDB instance
 func New(file string) *BuntDB {
+	if file == "" { // use memory
+		file = Memory
+	}
+
 	db, err := buntdb.Open(file)
 	if err != nil {
 		panic(err)
@@ -34,6 +40,12 @@ func New(file string) *BuntDB {
 	}
 }
 
+// Db get
+func (c *BuntDB) Db() *buntdb.DB {
+	return c.db
+}
+
+// Has key
 func (c *BuntDB) Has(key string) bool {
 	has := false
 	err := c.db.View(func(tx *buntdb.Tx) error {
@@ -53,7 +65,17 @@ func (c *BuntDB) Has(key string) bool {
 func (c *BuntDB) Get(key string) interface{} {
 	var val interface{}
 	err := c.db.View(func(tx *buntdb.Tx) (err error) {
-		val, err = tx.Get(key, false)
+		str, err := tx.Get(key, false)
+		if err != nil {
+			return
+		}
+
+		buf := bytes.NewBuffer([]byte(str))
+		dec := gob.NewDecoder(buf)
+		if err = dec.Decode(val); err != nil {
+			return err
+		}
+
 		return err
 	})
 
@@ -64,13 +86,32 @@ func (c *BuntDB) Get(key string) interface{} {
 	return val
 }
 
-// Get value by key
+// Set value by key
 func (c *BuntDB) Set(key string, val interface{}, ttl time.Duration) (err error) {
-	panic("implement me")
+	buf := new(bytes.Buffer)
+	enc := gob.NewEncoder(buf)
+	if err = enc.Encode(val); err != nil {
+		return
+	}
+
+	return c.db.Update(func(tx *buntdb.Tx) (err error) {
+		opt := &buntdb.SetOptions{}
+		if ttl > 0 {
+			opt.TTL = ttl
+			opt.Expires = true
+		}
+
+		_, _, err = tx.Set(key, buf.String(), opt)
+		return err
+	})
 }
 
+// Del value by key
 func (c *BuntDB) Del(key string) error {
-	panic("implement me")
+	return c.db.View(func(tx *buntdb.Tx) error {
+		_, err := tx.Delete(key)
+		return err
+	})
 }
 
 func (c *BuntDB) GetMulti(keys []string) map[string]interface{} {
@@ -82,12 +123,22 @@ func (c *BuntDB) SetMulti(values map[string]interface{}, ttl time.Duration) (err
 }
 
 func (c *BuntDB) DelMulti(keys []string) error {
-	panic("implement me")
+	return c.db.Update(func(tx *buntdb.Tx) (err error) {
+		for _, k := range keys {
+			if _, err = tx.Delete(k); err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
 }
 
-// Clear cache data
+// Clear all cache data
 func (c *BuntDB) Clear() error {
-	return c.db.Close()
+	return c.db.View(func(tx *buntdb.Tx) error {
+		return tx.DeleteAll()
+	})
 }
 
 // Close cache db
