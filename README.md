@@ -9,6 +9,7 @@ Drivers:
 - memory
 - memCached
 - buntdb [tidwall/buntdb](https://github.com/tidwall/buntdb)
+- boltdb [etcd-io/bbolt](https://github.com/etcd-io/bbolt)
 
 ## Godoc
 

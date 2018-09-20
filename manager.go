@@ -6,6 +6,8 @@ const (
 	DvrRedis     = "redis"
 	DvrMemory    = "memory"
 	DvrMemCached = "memCached"
+	DvrBoltDB    = "boltDB"
+	DvrBuntDB    = "buntDB"
 )
 
 /*************************************************************
