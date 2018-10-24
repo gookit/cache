@@ -3,6 +3,8 @@
 [![GoDoc](https://godoc.org/github.com/gookit/cache?status.svg)](https://godoc.org/github.com/gookit/cache)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gookit/cache)](https://goreportcard.com/report/github.com/gookit/cache)
 
+> **[中文说明](README_cn.md)**
+
 Generic cache use and cache manager for golang.
 
 Supported Drivers:

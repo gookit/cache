@@ -3,6 +3,8 @@
 [![GoDoc](https://godoc.org/github.com/gookit/cache?status.svg)](https://godoc.org/github.com/gookit/cache)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gookit/cache)](https://goreportcard.com/report/github.com/gookit/cache)
 
+> **[EN README](README.md)**
+
 Go下通用的缓存使用库，通过包装各种常用的驱动，来提供统一的使用API。
 
 支持的驱动:
