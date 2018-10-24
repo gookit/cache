@@ -1,11 +1,11 @@
 // Package redis is a simple redis cache implement.
-// base on the package: github.com/garyburd/redigo
+// base on the package: github.com/gomodule/redigo
 package redis
 
 import (
 	"errors"
 	"fmt"
-	"github.com/garyburd/redigo/redis"
+	"github.com/gomodule/redigo/redis"
 	"log"
 	"time"
 )

@@ -1,3 +1,4 @@
+// Package memcached use the "github.com/bradfitz/gomemcache/memcache" as cache driver
 package memcached
 
 import (

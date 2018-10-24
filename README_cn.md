@@ -3,12 +3,12 @@
 [![GoDoc](https://godoc.org/github.com/gookit/cache?status.svg)](https://godoc.org/github.com/gookit/cache)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gookit/cache)](https://goreportcard.com/report/github.com/gookit/cache)
 
-Generic cache use and cache manager for golang.
+Go下通用的缓存使用库，通过包装各种常用的驱动，来提供统一的使用API。
 
-Supported Drivers:
+支持的驱动:
 
-- file internal driver
-- memory internal driver
+- file 文件缓存(internal driver)
+- memory 内存缓存(internal driver)
 - redis powered by `github.com/gomodule/redigo`
 - memCached powered by `github.com/bradfitz/gomemcache`
 - buntdb powered by `github.com/tidwall/buntdb`
@@ -20,7 +20,7 @@ Supported Drivers:
 - [godoc for gopkg](https://godoc.org/gopkg.in/gookit/cache.v1)
 - [godoc for github](https://godoc.org/github.com/gookit/cache)
 
-## Interface
+## 接口方法
 
 ```go
 // Cache interface definition
@@ -39,7 +39,7 @@ type Cache interface {
 }
 ```
 
-## Usage
+## 使用
 
 ```go
 package main
@@ -51,15 +51,15 @@ import (
 )
 
 func main() {
-	// register one(or some) cache driver
+	// 注册一个（或多个）缓存驱动
 	cache.Register(cache.DvrFile, cache.NewFileCache(""))
 	cache.Register(cache.DvrMemory, cache.NewMemoryCache())
 	cache.Register(cache.DvrRedis, redis.Connect("127.0.0.1:6379", "", 0))
 	
-	// setting default driver name
+	// 设置默认驱动名称
 	cache.SetDefName(cache.DvrRedis)
 
-	// quick use.(it is default driver)
+	// 快速使用（默认驱动）
 	//
 	// set
 	cache.Set("name", "cache value", cache.TwoMinutes)
@@ -68,11 +68,18 @@ func main() {
 	// del
 	cache.Del("name")
 
-	// get: "cache value"
+	// Out: "cache value"
+	fmt.Print(val)
+	
+	// 使用已注册的其他驱动
+	client := cache.Use(cache.DvrFile)
+	client.Set("key", "val", 0)
+	val = client.Get("key")
+	// Out: "val"
 	fmt.Print(val)
 }
 ```
 
 ## License
 
-**MIT**
+**[MIT](LICENSE)**
