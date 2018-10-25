@@ -130,11 +130,10 @@ func (c *MemoryCache) Restore(file string) error {
 
 // DumpDB to a file
 func (c *MemoryCache) DumpDB(file string) error {
-
 	return nil
 }
 
-// DumpDB iteration all caches
+// Iter iteration all caches
 func (c *MemoryCache) Iter(file string) error {
 	return nil
 }

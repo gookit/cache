@@ -28,13 +28,14 @@ func New(file string) *BoltDB {
 	return &BoltDB{db: db, Bucket: "myBucket"}
 }
 
+// Has value check by key
 func (c *BoltDB) Has(key string) bool {
 	panic("implement me")
 }
 
+// Get value by key
 func (c *BoltDB) Get(key string) interface{} {
 	var val interface{}
-
 	err := c.db.View(func(tx *bbolt.Tx) error {
 		b := tx.Bucket([]byte(c.Bucket))
 		bs := b.Get([]byte(key))
@@ -55,6 +56,7 @@ func (c *BoltDB) Get(key string) interface{} {
 	return val
 }
 
+// Set value by key
 func (c *BoltDB) Set(key string, val interface{}, _ time.Duration) (err error) {
 	buf := new(bytes.Buffer)
 	enc := gob.NewEncoder(buf)
@@ -69,22 +71,32 @@ func (c *BoltDB) Set(key string, val interface{}, _ time.Duration) (err error) {
 	})
 }
 
+// Del value by key
 func (c *BoltDB) Del(key string) error {
 	panic("implement me")
 }
 
+// GetMulti values by multi key
 func (c *BoltDB) GetMulti(keys []string) map[string]interface{} {
 	panic("implement me")
 }
 
+// SetMulti values by multi key
 func (c *BoltDB) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
 	panic("implement me")
 }
 
+// DelMulti values by multi key
 func (c *BoltDB) DelMulti(keys []string) error {
 	panic("implement me")
 }
 
+// Clear all data
 func (c *BoltDB) Clear() error {
 	panic("implement me")
+}
+
+// Close db
+func (c *BoltDB) Close() error {
+	return c.db.Close()
 }

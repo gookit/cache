@@ -2,8 +2,7 @@
 package buntdb
 
 import (
-	"bytes"
-	"encoding/gob"
+	"github.com/gookit/cache"
 	"github.com/tidwall/buntdb"
 	"time"
 )
@@ -64,19 +63,13 @@ func (c *BuntDB) Has(key string) bool {
 // Get value by key
 func (c *BuntDB) Get(key string) interface{} {
 	var val interface{}
-	err := c.db.View(func(tx *buntdb.Tx) (err error) {
+	err := c.db.View(func(tx *buntdb.Tx) error {
 		str, err := tx.Get(key, false)
 		if err != nil {
-			return
-		}
-
-		buf := bytes.NewBuffer([]byte(str))
-		dec := gob.NewDecoder(buf)
-		if err = dec.Decode(val); err != nil {
 			return err
 		}
 
-		return err
+		return cache.GobDecode([]byte(str), val)
 	})
 
 	if err != nil {
@@ -88,10 +81,9 @@ func (c *BuntDB) Get(key string) interface{} {
 
 // Set value by key
 func (c *BuntDB) Set(key string, val interface{}, ttl time.Duration) (err error) {
-	buf := new(bytes.Buffer)
-	enc := gob.NewEncoder(buf)
-	if err = enc.Encode(val); err != nil {
-		return
+	bts, err := cache.GobEncode(val)
+	if err != nil {
+		return err
 	}
 
 	return c.db.Update(func(tx *buntdb.Tx) (err error) {
@@ -101,27 +93,73 @@ func (c *BuntDB) Set(key string, val interface{}, ttl time.Duration) (err error)
 			opt.Expires = true
 		}
 
-		_, _, err = tx.Set(key, buf.String(), opt)
+		_, _, err = tx.Set(key, string(bts), opt)
 		return err
 	})
 }
 
 // Del value by key
 func (c *BuntDB) Del(key string) error {
-	return c.db.View(func(tx *buntdb.Tx) error {
+	return c.db.Update(func(tx *buntdb.Tx) error {
 		_, err := tx.Delete(key)
 		return err
 	})
 }
 
+// GetMulti values by multi key
 func (c *BuntDB) GetMulti(keys []string) map[string]interface{} {
-	panic("implement me")
+	results := make(map[string]interface{}, len(keys))
+	err := c.db.View(func(tx *buntdb.Tx) error {
+		for _, key := range keys {
+			str, err := tx.Get(key, false)
+			if err != nil {
+				return err
+			}
+
+			var val interface{}
+			err = cache.GobDecode([]byte(str), val)
+			if err != nil {
+				return err
+			}
+
+			results[key] = val
+		}
+		return nil
+	})
+
+	if err != nil {
+		return nil
+	}
+
+	return results
 }
 
+// SetMulti values by multi key
 func (c *BuntDB) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
-	panic("implement me")
+	return c.db.Update(func(tx *buntdb.Tx) (err error) {
+		opt := &buntdb.SetOptions{}
+		if ttl > 0 {
+			opt.TTL = ttl
+			opt.Expires = true
+		}
+
+		for key, val := range values {
+			bts, err := cache.GobEncode(val)
+			if err != nil {
+				return err
+			}
+
+			_, _, err = tx.Set(key, string(bts), opt)
+			if err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
 }
 
+// DelMulti values by multi key
 func (c *BuntDB) DelMulti(keys []string) error {
 	return c.db.Update(func(tx *buntdb.Tx) (err error) {
 		for _, k := range keys {
@@ -136,7 +174,7 @@ func (c *BuntDB) DelMulti(keys []string) error {
 
 // Clear all cache data
 func (c *BuntDB) Clear() error {
-	return c.db.View(func(tx *buntdb.Tx) error {
+	return c.db.Update(func(tx *buntdb.Tx) error {
 		return tx.DeleteAll()
 	})
 }

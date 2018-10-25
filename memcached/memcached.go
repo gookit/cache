@@ -2,9 +2,8 @@
 package memcached
 
 import (
-	"bytes"
-	"encoding/gob"
 	"github.com/bradfitz/gomemcache/memcache"
+	"github.com/gookit/cache"
 	"time"
 )
 
@@ -49,10 +48,9 @@ func (c *MemCached) Get(key string) (val interface{}) {
 		return
 	}
 
-	buf := bytes.NewBuffer(item.Value)
-	dec := gob.NewDecoder(buf)
-	if err := dec.Decode(val); err != nil {
-		return
+	err = cache.GobDecode(item.Value, val)
+	if err != nil {
+		return nil
 	}
 
 	return
@@ -60,15 +58,14 @@ func (c *MemCached) Get(key string) (val interface{}) {
 
 // Set value by key
 func (c *MemCached) Set(key string, val interface{}, ttl time.Duration) (err error) {
-	buf := new(bytes.Buffer)
-	enc := gob.NewEncoder(buf)
-	if err = enc.Encode(val); err != nil {
-		return
+	bts, err := cache.GobEncode(val)
+	if err != nil {
+		return err
 	}
 
 	return c.client.Set(&memcache.Item{
 		Key:   key,
-		Value: buf.Bytes(),
+		Value: bts,
 		// expire time. 0 is never
 		Expiration: int32(ttl / time.Second),
 	})
@@ -90,10 +87,7 @@ func (c *MemCached) GetMulti(keys []string) map[string]interface{} {
 
 	for key, item := range items {
 		var val interface{}
-
-		buf := bytes.NewBuffer(item.Value)
-		dec := gob.NewDecoder(buf)
-		if err := dec.Decode(val); err != nil {
+		if err := cache.GobDecode(item.Value, val); err != nil {
 			return nil
 		}
 
