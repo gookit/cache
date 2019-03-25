@@ -5,7 +5,7 @@ import "time"
 
 // LevelDB definition
 type LevelDB struct {
-
+	db *leveldb.DB
 }
 
 func (c *LevelDB) Has(key string) bool {
@@ -41,7 +41,7 @@ func (c *LevelDB) Clear() error {
 }
 
 func (c *LevelDB) Close() error {
-	panic("implement me")
+	return c.db.Close()
 }
 
 
