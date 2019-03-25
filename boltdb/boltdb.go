@@ -4,8 +4,9 @@ package boltdb
 import (
 	"bytes"
 	"encoding/gob"
-	"github.com/etcd-io/bbolt"
 	"time"
+
+	"github.com/etcd-io/bbolt"
 )
 
 // BoltDB definition

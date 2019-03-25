@@ -2,9 +2,10 @@
 package buntdb
 
 import (
+	"time"
+
 	"github.com/gookit/cache"
 	"github.com/tidwall/buntdb"
-	"time"
 )
 
 // Memory open a file that does not persist to disk.
@@ -75,7 +76,6 @@ func (c *BuntDB) Get(key string) interface{} {
 	if err != nil {
 		return nil
 	}
-
 	return val
 }
 

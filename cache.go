@@ -5,11 +5,14 @@ package cache
 
 import (
 	"encoding/json"
+	"io"
 	"time"
 )
 
 // Cache interface definition
 type Cache interface {
+	io.Closer
+
 	// basic op
 	// Has cache key
 	Has(key string) bool

@@ -86,7 +86,7 @@ func (c *FileCache) Get(key string) interface{} {
 	}
 
 	// has been expired. delete it.
-	c.Del(key)
+	c.lastErr = c.Del(key)
 	return nil
 }
 
@@ -129,7 +129,7 @@ func (c *FileCache) Set(key string, val interface{}, ttl time.Duration) (err err
 
 // Del value by key
 func (c *FileCache) Del(key string) error {
-	c.MemoryCache.Del(key)
+	c.lastErr = c.MemoryCache.Del(key)
 
 	c.lock.RLock()
 	defer c.lock.RUnlock()
@@ -166,7 +166,7 @@ func (c *FileCache) SetMulti(values map[string]interface{}, ttl time.Duration) (
 // DelMulti values by multi key
 func (c *FileCache) DelMulti(keys []string) error {
 	for _, key := range keys {
-		c.Del(key)
+		_= c.Del(key)
 	}
 	return nil
 }

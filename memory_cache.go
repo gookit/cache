@@ -49,7 +49,7 @@ func (c *MemoryCache) Get(key string) interface{} {
 		}
 
 		// has been expired. delete it.
-		c.Del(key)
+		_= c.Del(key)
 	}
 
 	c.lock.RUnlock()
@@ -107,7 +107,7 @@ func (c *MemoryCache) SetMulti(values map[string]interface{}, ttl time.Duration)
 // DelMulti values by multi key
 func (c *MemoryCache) DelMulti(keys []string) error {
 	for _, key := range keys {
-		c.Del(key)
+		_= c.Del(key)
 	}
 	return nil
 }

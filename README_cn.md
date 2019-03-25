@@ -15,6 +15,9 @@ Go下通用的缓存使用库，通过包装各种常用的驱动，来提供统
 - memCached powered by `github.com/bradfitz/gomemcache`
 - buntdb powered by `github.com/tidwall/buntdb`
 - boltdb powered by `github.com/etcd-io/bbolt`
+- badger db https://github.com/dgraph-io/badger
+- nutsdb https://github.com/xujiajun/nutsdb
+- goleveldb https://github.com/syndtr/goleveldb
 
 ## GoDoc
 

@@ -2,6 +2,7 @@ package cache
 
 import (
 	"fmt"
+
 	"github.com/gookit/cache/redis"
 )
 

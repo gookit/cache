@@ -5,9 +5,10 @@ package redis
 import (
 	"errors"
 	"fmt"
-	"github.com/gomodule/redigo/redis"
 	"log"
 	"time"
+
+	"github.com/gomodule/redigo/redis"
 )
 
 // RedisCache definition.
@@ -148,6 +149,11 @@ func (c *RedisCache) DelMulti(keys []string) (err error) {
 	return
 }
 
+// Close connections
+func (c *RedisCache) Close() error {
+	return c.pool.Close()
+}
+
 // Clear all caches
 func (c *RedisCache) Clear() error {
 	conn := c.pool.Get()
@@ -233,11 +239,11 @@ func newPool(url, password string, dbNum int) *redis.Pool {
 			if password != "" {
 				_, err := c.Do("AUTH", password)
 				if err != nil {
-					c.Close()
+					_= c.Close()
 					return nil, err
 				}
 			}
-			c.Do("SELECT", dbNum)
+			_,_ = c.Do("SELECT", dbNum)
 			return c, err
 		},
 		TestOnBorrow: func(c redis.Conn, t time.Time) error {

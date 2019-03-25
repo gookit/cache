@@ -2,9 +2,10 @@
 package memcached
 
 import (
+	"time"
+
 	"github.com/bradfitz/gomemcache/memcache"
 	"github.com/gookit/cache"
-	"time"
 )
 
 // MemCached definition
@@ -122,6 +123,11 @@ func (c *MemCached) DelMulti(keys []string) error {
 // Clear all caches
 func (c *MemCached) Clear() error {
 	return c.client.DeleteAll()
+}
+
+// Close driver
+func (*MemCached) Close() error {
+	return nil
 }
 
 // Client get
