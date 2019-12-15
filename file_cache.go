@@ -171,6 +171,11 @@ func (c *FileCache) DelMulti(keys []string) error {
 	return nil
 }
 
+// Close cache
+func (c *FileCache) Close() error {
+	return nil
+}
+
 // Clear caches and files
 func (c *FileCache) Clear() error {
 	for key := range c.caches {

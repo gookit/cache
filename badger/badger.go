@@ -1,7 +1,11 @@
 // Package leveldb use the https://github.com/dgraph-io/badger as cache driver
-package leveldb
+package badger
 
-import "time"
+import (
+	"time"
+
+	"github.com/dgraph-io/badger"
+)
 
 // BadgerDB definition
 type BadgerDB struct {
@@ -43,5 +47,3 @@ func (c *BadgerDB) Clear() error {
 func (c *BadgerDB) Close() error {
 	return c.db.Close()
 }
-
-

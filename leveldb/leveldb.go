@@ -1,7 +1,11 @@
 // Package leveldb use the https://github.com/syndtr/goleveldb as cache driver
 package leveldb
 
-import "time"
+import (
+	"time"
+
+	"github.com/syndtr/goleveldb/leveldb"
+)
 
 // LevelDB definition
 type LevelDB struct {
@@ -43,5 +47,3 @@ func (c *LevelDB) Clear() error {
 func (c *LevelDB) Close() error {
 	return c.db.Close()
 }
-
-

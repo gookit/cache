@@ -98,8 +98,8 @@ func Use(driverName string) Cache {
 	return defMgr.drivers[driverName]
 }
 
-// DefMgr get default cache manager instance
-func DefMgr() *Manager {
+// DefManager get default cache manager instance
+func DefManager() *Manager {
 	return defMgr
 }
 

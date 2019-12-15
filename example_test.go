@@ -18,11 +18,11 @@ func Example() {
 	// quick use.(it is default driver)
 	//
 	// set
-	Set("name", "cache value", TwoMinutes)
+	_ = Set("name", "cache value", TwoMinutes)
 	// get
 	val := Get("name")
 	// del
-	Del("name")
+	_ = Del("name")
 
 	// get: "cache value"
 	fmt.Print(val)

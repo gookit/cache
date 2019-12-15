@@ -112,6 +112,11 @@ func (c *MemoryCache) DelMulti(keys []string) error {
 	return nil
 }
 
+// Close cache
+func (c *MemoryCache) Close() error {
+	return nil
+}
+
 // Clear all caches
 func (c *MemoryCache) Clear() error {
 	c.caches = nil
