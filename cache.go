@@ -31,7 +31,7 @@ type Cache interface {
 // some generic expire time define.
 const (
 	// 永远存在
-	FOREVER = 0
+	Forever = 0
 	// 1 分钟
 	OneMinutes = 60 * time.Second
 	// 2 分钟
@@ -83,18 +83,30 @@ var defMgr = NewManager()
 
 // Register driver to manager instance
 func Register(name string, driver Cache) *Manager {
-	defMgr.SetDefName(name)
+	defMgr.DefaultUse(name)
 	defMgr.Register(name, driver)
 	return defMgr
 }
 
-// SetDefName set default driver name
+// SetDefName set default driver name.
+// Deprecated
+//  please use DefaultUse() instead it
 func SetDefName(driverName string) {
-	defMgr.SetDefName(driverName)
+	defMgr.DefaultUse(driverName)
 }
 
-// Use returns a driver instance
+// DefaultUse set default driver name
+func DefaultUse(driverName string) {
+	defMgr.DefaultUse(driverName)
+}
+
+// Use driver object by name and set it as default driver.
 func Use(driverName string) Cache {
+	return defMgr.Use(driverName)
+}
+
+// GetCache returns a driver instance by name
+func GetCache(driverName string) Cache {
 	return defMgr.drivers[driverName]
 }
 
@@ -109,7 +121,7 @@ func Default() Cache {
 }
 
 /*************************************************************
- * quick use
+ * quick use by default cache driver
  *************************************************************/
 
 // Has cache key

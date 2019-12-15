@@ -13,7 +13,7 @@ func Example() {
 	Register(DvrRedis, redis.Connect("127.0.0.1:6379", "", 0))
 
 	// setting default driver name
-	SetDefName(DvrRedis)
+	DefaultUse(DvrRedis)
 
 	// quick use.(it is default driver)
 	//
@@ -26,6 +26,11 @@ func Example() {
 
 	// get: "cache value"
 	fmt.Print(val)
+
+	// More ...
+	// fc := GetCache(DvrFile)
+	// fc.Set("key", "value", 10)
+	// fc.Get("key")
 }
 
 func ExampleMemoryCache() {

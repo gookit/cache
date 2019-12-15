@@ -1,5 +1,7 @@
 package cache
 
+import "time"
+
 // default supported cache driver name
 const (
 	DvrFile      = "file"
@@ -11,7 +13,7 @@ const (
 )
 
 /*************************************************************
- * Manager
+ * Cache Manager
  *************************************************************/
 
 // Manager definition
@@ -31,8 +33,15 @@ func NewManager() *Manager {
 	}
 }
 
-// SetDefName set default driver name
+// SetDefName set default driver name. alias of DefaultUse()
+// Deprecated
+//  please use DefaultUse() instead it
 func (m *Manager) SetDefName(driverName string) {
+	m.defName = driverName
+}
+
+// DefaultUse set default driver name
+func (m *Manager) DefaultUse(driverName string) {
 	m.defName = driverName
 }
 
@@ -47,22 +56,63 @@ func (m *Manager) Default() Cache {
 	return m.drivers[m.defName]
 }
 
-// Use returns a driver instance
+// Use driver object by name and set it as default driver.
 func (m *Manager) Use(driverName string) Cache {
+	defMgr.DefaultUse(driverName)
+
 	return m.drivers[driverName]
 }
 
 // Get driver object by name
-func (m *Manager) Get(name string) Cache {
-	return m.Use(name)
+func (m *Manager) GetCache(driverName string) Cache {
+	return m.drivers[driverName]
 }
 
-// Driver object get
-func (m *Manager) Driver(name string) Cache {
-	return m.Use(name)
+// Driver object get by name
+func (m *Manager) Driver(driverName string) Cache {
+	return m.GetCache(driverName)
 }
 
 // DefName get default driver name
 func (m *Manager) DefName() string {
 	return m.defName
+}
+
+/*************************************************************
+ * Quick use by default cache driver
+ *************************************************************/
+
+// Has cache key
+func (m *Manager) Has(key string) bool {
+	return m.Default().Has(key)
+}
+
+// Get value by key
+func (m *Manager) Get(key string) interface{} {
+	return m.Default().Get(key)
+}
+
+// Set value by key
+func (m *Manager) Set(key string, val interface{}, ttl time.Duration) error {
+	return m.Default().Set(key, val, ttl)
+}
+
+// Del value by key
+func (m *Manager) Del(key string) error {
+	return m.Default().Del(key)
+}
+
+// GetMulti values by keys
+func (m *Manager) GetMulti(keys []string) map[string]interface{} {
+	return m.Default().GetMulti(keys)
+}
+
+// SetMulti values
+func (m *Manager) SetMulti(mv map[string]interface{}, ttl time.Duration) error {
+	return m.Default().SetMulti(mv, ttl)
+}
+
+// DelMulti values by keys
+func (m *Manager) DelMulti(keys []string) error {
+	return m.Default().DelMulti(keys)
 }

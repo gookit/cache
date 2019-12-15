@@ -5,19 +5,21 @@
 
 > **[EN README](README.md)**
 
-Go下通用的缓存使用库，通过包装各种常用的驱动，来提供统一的使用API。
+Golang 通用的缓存使用库，通过包装各种常用的驱动，来提供统一的使用API。
 
-支持的驱动:
+> 所有缓存驱动程序都实现了 `cache.Cache` 接口。 因此，您可以添加任何自定义驱动程序。
 
-- file 文件缓存(internal driver)
-- memory 内存缓存(internal driver)
-- redis powered by `github.com/gomodule/redigo`
-- memCached powered by `github.com/bradfitz/gomemcache`
-- buntdb powered by `github.com/tidwall/buntdb`
-- boltdb powered by `github.com/etcd-io/bbolt`
-- badger db https://github.com/dgraph-io/badger
-- nutsdb https://github.com/xujiajun/nutsdb
-- goleveldb https://github.com/syndtr/goleveldb
+**支持的驱动:**
+
+- file 简单的文件缓存(当前包的内置实现)
+- memory 简单的内存缓存(当前包的内置实现)
+- `redis`  by `github.com/gomodule/redigo`
+- `memCached` by `github.com/bradfitz/gomemcache`
+- `buntdb` by `github.com/tidwall/buntdb`
+- `boltdb`  by `github.com/etcd-io/bbolt`
+- `badger db` by `github.com/dgraph-io/badger`
+- `nutsdb` by `github.com/xujiajun/nutsdb`
+- `goleveldb` by `github.com/syndtr/goleveldb`
 
 ## GoDoc
 
@@ -25,7 +27,15 @@ Go下通用的缓存使用库，通过包装各种常用的驱动，来提供统
 - [godoc for gopkg](https://godoc.org/gopkg.in/gookit/cache.v1)
 - [godoc for github](https://godoc.org/github.com/gookit/cache)
 
+## 安装
+
+```bash
+go get github.com/gookit/cache
+```
+
 ## 接口方法
+
+所有缓存驱动程序都实现了cache.Cache接口。 因此，您可以添加任何自定义驱动程序。
 
 ```go
 // Cache interface definition
