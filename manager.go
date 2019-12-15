@@ -58,19 +58,18 @@ func (m *Manager) Default() Cache {
 
 // Use driver object by name and set it as default driver.
 func (m *Manager) Use(driverName string) Cache {
-	defMgr.DefaultUse(driverName)
+	m.DefaultUse(driverName)
+	return m.Driver(driverName)
+}
 
+// Cache driver object by name. alias of Driver()
+func (m *Manager) Cache(driverName string) Cache {
 	return m.drivers[driverName]
 }
 
-// Get driver object by name
-func (m *Manager) GetCache(driverName string) Cache {
-	return m.drivers[driverName]
-}
-
-// Driver object get by name
+// Driver get a driver instance by name
 func (m *Manager) Driver(driverName string) Cache {
-	return m.GetCache(driverName)
+	return m.drivers[driverName]
 }
 
 // DefName get default driver name

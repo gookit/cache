@@ -5,27 +5,23 @@ package cache
 
 import (
 	"encoding/json"
-	"io"
 	"time"
 )
 
 // Cache interface definition
 type Cache interface {
-	io.Closer
-
-	// basic op
-	// Has cache key
+	// basic operation
 	Has(key string) bool
-	// Get value by key
 	Get(key string) interface{}
 	Set(key string, val interface{}, ttl time.Duration) (err error)
 	Del(key string) error
-	// multi op
+	// multi operation
 	GetMulti(keys []string) map[string]interface{}
 	SetMulti(values map[string]interface{}, ttl time.Duration) (err error)
 	DelMulti(keys []string) error
-	// clear
+	// clear and close
 	Clear() error
+	Close() error
 }
 
 // some generic expire time define.
@@ -105,9 +101,14 @@ func Use(driverName string) Cache {
 	return defMgr.Use(driverName)
 }
 
-// GetCache returns a driver instance by name
+// GetCache returns a driver instance by name. alias of Driver()
 func GetCache(driverName string) Cache {
-	return defMgr.drivers[driverName]
+	return defMgr.Cache(driverName)
+}
+
+// Driver get a driver instance by name
+func Driver(driverName string) Cache {
+	return defMgr.Driver(driverName)
 }
 
 // DefManager get default cache manager instance

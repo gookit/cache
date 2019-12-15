@@ -89,7 +89,7 @@ func main() {
 	fmt.Print(val)
 
 	// More ...
-	// fc := cache.GetCache(DvrFile)
+	// fc := cache.Driver(DvrFile)
 	// fc.Set("key", "value", 10)
 	// fc.Get("key")
 }

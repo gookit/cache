@@ -89,7 +89,7 @@ func main() {
 	fmt.Print(val)
 	
 	// 使用已注册的其他驱动
-	client := cache.Use(cache.DvrFile)
+	client := cache.Driver(cache.DvrFile)
 	client.Set("key", "val", 0)
 	val = client.Get("key")
 	// Out: "val"
