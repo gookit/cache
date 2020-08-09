@@ -32,16 +32,21 @@ func NewMemoryCache() *MemoryCache {
 
 // Has cache key
 func (c *MemoryCache) Has(key string) bool {
-	// c.lock.RLock()
+	c.lock.RLock()
 	_, ok := c.caches[key]
-	// c.lock.RUnlock()
+	c.lock.RUnlock()
 	return ok
 }
 
 // Get cache value by key
 func (c *MemoryCache) Get(key string) interface{} {
 	c.lock.RLock()
+	defer c.lock.RUnlock()
 
+	return c.get(key)
+}
+
+func (c *MemoryCache) get(key string) interface{} {
 	if item, ok := c.caches[key]; ok {
 		// check expire time
 		if item.Exp == 0 || item.Exp > time.Now().Unix() {
@@ -49,45 +54,54 @@ func (c *MemoryCache) Get(key string) interface{} {
 		}
 
 		// has been expired. delete it.
-		_= c.Del(key)
+		_ = c.Del(key)
 	}
 
-	c.lock.RUnlock()
 	return nil
 }
 
 // Set cache value by key
 func (c *MemoryCache) Set(key string, val interface{}, ttl time.Duration) (err error) {
 	c.lock.Lock()
+	defer c.lock.Unlock()
 
+	return c.set(key, val, ttl)
+}
+
+func (c *MemoryCache) set(key string, val interface{}, ttl time.Duration) (err error) {
 	item := &Item{Val: val}
 	if ttl > 0 {
 		item.Exp = time.Now().Unix() + int64(ttl/time.Second)
 	}
 
 	c.caches[key] = item
-	c.lock.Unlock()
-
 	return
 }
 
 // Del cache by key
 func (c *MemoryCache) Del(key string) error {
-	c.lock.RLock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 
+	return c.del(key)
+}
+
+func (c *MemoryCache) del(key string) error {
 	if _, ok := c.caches[key]; ok {
 		delete(c.caches, key)
 	}
 
-	c.lock.RUnlock()
 	return nil
 }
 
 // GetMulti values by multi key
 func (c *MemoryCache) GetMulti(keys []string) map[string]interface{} {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+
 	values := make(map[string]interface{}, len(keys))
 	for _, key := range keys {
-		values[key] = c.Get(key)
+		values[key] = c.get(key)
 	}
 
 	return values
@@ -95,19 +109,24 @@ func (c *MemoryCache) GetMulti(keys []string) map[string]interface{} {
 
 // SetMulti values by multi key
 func (c *MemoryCache) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
 	for key, val := range values {
-		if err = c.Set(key, val, ttl); err != nil {
+		if err = c.set(key, val, ttl); err != nil {
 			return
 		}
 	}
-
 	return
 }
 
 // DelMulti values by multi key
 func (c *MemoryCache) DelMulti(keys []string) error {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
 	for _, key := range keys {
-		_= c.Del(key)
+		_ = c.del(key)
 	}
 	return nil
 }
