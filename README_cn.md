@@ -3,6 +3,7 @@
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/gookit/cache?style=flat-square)
 [![GoDoc](https://godoc.org/github.com/gookit/cache?status.svg)](https://pkg.go.dev/github.com/gookit/cache)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gookit/cache)](https://goreportcard.com/report/github.com/gookit/cache)
+[![Actions Status](https://github.com/gookit/cache/workflows/Unit-Tests/badge.svg)](https://github.com/gookit/cache/actions)
 
 > **[EN README](README.md)**
 
