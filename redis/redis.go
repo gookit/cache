@@ -239,11 +239,11 @@ func newPool(url, password string, dbNum int) *redis.Pool {
 			if password != "" {
 				_, err := c.Do("AUTH", password)
 				if err != nil {
-					_= c.Close()
+					_ = c.Close()
 					return nil, err
 				}
 			}
-			_,_ = c.Do("SELECT", dbNum)
+			_, _ = c.Do("SELECT", dbNum)
 			return c, err
 		},
 		TestOnBorrow: func(c redis.Conn, t time.Time) error {

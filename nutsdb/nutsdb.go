@@ -5,7 +5,6 @@ import "time"
 
 // NutsDB definition
 type NutsDB struct {
-
 }
 
 func (c *NutsDB) Has(key string) bool {
@@ -43,5 +42,3 @@ func (c *NutsDB) Clear() error {
 func (c *NutsDB) Close() error {
 	panic("implement me")
 }
-
-

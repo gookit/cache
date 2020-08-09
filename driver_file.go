@@ -58,13 +58,17 @@ func (c *FileCache) Has(key string) bool {
 
 // Get value by key
 func (c *FileCache) Get(key string) interface{} {
-	// read cache from memory
-	if val := c.MemoryCache.Get(key); val != nil {
-		return val
-	}
-
 	c.lock.RLock()
 	defer c.lock.RUnlock()
+
+	return c.get(key)
+}
+
+func (c *FileCache) get(key string) interface{} {
+	// read cache from memory
+	if val := c.MemoryCache.get(key); val != nil {
+		return val
+	}
 
 	// read cache from file
 	bs, err := ioutil.ReadFile(c.GetFilename(key))
@@ -92,7 +96,14 @@ func (c *FileCache) Get(key string) interface{} {
 
 // Set value by key
 func (c *FileCache) Set(key string, val interface{}, ttl time.Duration) (err error) {
-	if err = c.MemoryCache.Set(key, val, ttl); err != nil {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
+	return c.set(key, val, ttl)
+}
+
+func (c *FileCache) set(key string, val interface{}, ttl time.Duration) (err error) {
+	if err = c.MemoryCache.set(key, val, ttl); err != nil {
 		c.lastErr = err
 		return
 	}
@@ -103,9 +114,6 @@ func (c *FileCache) Set(key string, val interface{}, ttl time.Duration) (err err
 		c.lastErr = err
 		return
 	}
-
-	c.lock.Lock()
-	defer c.lock.Unlock()
 
 	file := c.GetFilename(key)
 	dir := filepath.Dir(file)
@@ -129,10 +137,14 @@ func (c *FileCache) Set(key string, val interface{}, ttl time.Duration) (err err
 
 // Del value by key
 func (c *FileCache) Del(key string) error {
-	c.lastErr = c.MemoryCache.Del(key)
+	c.lock.Lock()
+	defer c.lock.Unlock()
 
-	c.lock.RLock()
-	defer c.lock.RUnlock()
+	return c.del(key)
+}
+
+func (c *FileCache) del(key string) error {
+	c.lastErr = c.MemoryCache.del(key)
 
 	file := c.GetFilename(key)
 	if fileExists(file) {
@@ -144,9 +156,12 @@ func (c *FileCache) Del(key string) error {
 
 // GetMulti values by multi key
 func (c *FileCache) GetMulti(keys []string) map[string]interface{} {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+
 	values := make(map[string]interface{}, len(keys))
 	for _, key := range keys {
-		values[key] = c.Get(key)
+		values[key] = c.get(key)
 	}
 
 	return values
@@ -154,8 +169,11 @@ func (c *FileCache) GetMulti(keys []string) map[string]interface{} {
 
 // SetMulti values by multi key
 func (c *FileCache) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
 	for key, val := range values {
-		if err = c.Set(key, val, ttl); err != nil {
+		if err = c.set(key, val, ttl); err != nil {
 			return
 		}
 	}
@@ -165,8 +183,11 @@ func (c *FileCache) SetMulti(values map[string]interface{}, ttl time.Duration) (
 
 // DelMulti values by multi key
 func (c *FileCache) DelMulti(keys []string) error {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
 	for _, key := range keys {
-		_= c.Del(key)
+		_ = c.del(key)
 	}
 	return nil
 }
@@ -178,6 +199,9 @@ func (c *FileCache) Close() error {
 
 // Clear caches and files
 func (c *FileCache) Clear() error {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
 	for key := range c.caches {
 		if file := c.GetFilename(key); fileExists(file) {
 			err := os.Remove(file)
