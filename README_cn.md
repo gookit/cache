@@ -1,6 +1,7 @@
 # cache
 
-[![GoDoc](https://godoc.org/github.com/gookit/cache?status.svg)](https://godoc.org/github.com/gookit/cache)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/gookit/cache?style=flat-square)
+[![GoDoc](https://godoc.org/github.com/gookit/cache?status.svg)](https://pkg.go.dev/github.com/gookit/cache)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gookit/cache)](https://goreportcard.com/report/github.com/gookit/cache)
 
 > **[EN README](README.md)**
@@ -26,8 +27,8 @@ Golang 通用的缓存管理使用库。
 ## GoDoc
 
 - [doc on gowalker](https://gowalker.org/github.com/gookit/cache)
-- [godoc for gopkg](https://godoc.org/gopkg.in/gookit/cache.v1)
-- [godoc for github](https://godoc.org/github.com/gookit/cache)
+- [godoc for gopkg](https://pkg.go.dev/gopkg.in/gookit/cache.v1)
+- [godoc for github](https://pkg.go.dev/github.com/gookit/cache)
 
 ## 安装
 

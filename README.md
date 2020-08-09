@@ -1,6 +1,7 @@
 # cache
 
-[![GoDoc](https://godoc.org/github.com/gookit/cache?status.svg)](https://godoc.org/github.com/gookit/cache)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/gookit/cache?style=flat-square)
+[![GoDoc](https://godoc.org/github.com/gookit/cache?status.svg)](https://pkg.go.dev/github.com/gookit/cache)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gookit/cache)](https://goreportcard.com/report/github.com/gookit/cache)
 
 > **[中文说明](README_cn.md)**
@@ -24,8 +25,8 @@ Generic cache use and cache manager for golang. Provide a unified usage API by p
 ## GoDoc
 
 - [doc on gowalker](https://gowalker.org/github.com/gookit/cache)
-- [godoc for gopkg](https://godoc.org/gopkg.in/gookit/cache.v1)
-- [godoc for github](https://godoc.org/github.com/gookit/cache)
+- [godoc for gopkg](https://pkg.go.dev/gopkg.in/gookit/cache.v1)
+- [godoc for github](https://pkg.go.dev/github.com/gookit/cache)
 
 ## Install
 
@@ -72,7 +73,7 @@ func main() {
 	cache.Register(cache.DvrFile, cache.NewFileCache(""))
 	cache.Register(cache.DvrMemory, cache.NewMemoryCache())
 	cache.Register(cache.DvrRedis, redis.Connect("127.0.0.1:6379", "", 0))
-	
+
 	// setting default driver name
 	cache.DefaultUse(cache.DvrRedis)
 

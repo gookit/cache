@@ -1,4 +1,4 @@
-// Package bolt use the github.com/etcd-io/bbolt as cache driver
+// Package bolt use the go.etcd.io/bbolt(github.com/etcd-io/bbolt) as cache driver
 package boltdb
 
 import (
@@ -6,7 +6,7 @@ import (
 	"encoding/gob"
 	"time"
 
-	"github.com/etcd-io/bbolt"
+	"go.etcd.io/bbolt"
 )
 
 // BoltDB definition

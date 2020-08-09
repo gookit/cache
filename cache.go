@@ -5,11 +5,16 @@ package cache
 
 import (
 	"encoding/json"
+	"io"
 	"time"
 )
 
 // Cache interface definition
 type Cache interface {
+	// close
+	io.Closer
+	// clear
+	Clear() error
 	// basic operation
 	Has(key string) bool
 	Get(key string) interface{}
@@ -19,9 +24,6 @@ type Cache interface {
 	GetMulti(keys []string) map[string]interface{}
 	SetMulti(values map[string]interface{}, ttl time.Duration) (err error)
 	DelMulti(keys []string) error
-	// clear and close
-	Clear() error
-	Close() error
 }
 
 // some generic expire time define.
