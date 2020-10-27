@@ -13,7 +13,7 @@ require (
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/syndtr/goleveldb v1.0.0
-	github.com/tidwall/buntdb v1.1.2
+	github.com/tidwall/buntdb v1.1.3
 	github.com/tidwall/gjson v1.6.0 // indirect
 	github.com/tidwall/pretty v1.0.1 // indirect
 	go.etcd.io/bbolt v1.3.5
