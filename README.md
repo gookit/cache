@@ -22,6 +22,8 @@ Generic cache use and cache manager for golang. Provide a unified usage API by p
 - `badger db` by `github.com/dgraph-io/badger`
 - `nutsdb` by `github.com/xujiajun/nutsdb`
 - `goleveldb` by `github.com/syndtr/goleveldb`
+- https://github.com/patrickmn/go-cache
+- https://github.com/allegro/bigcache
 
 ## GoDoc
 
