@@ -100,8 +100,8 @@ github.com/syndtr/goleveldb v1.0.0 h1:fBdIW9lB4Iz0n9khmH8w27SJ3QEJ7+IgjPEwGSZiFd
 github.com/syndtr/goleveldb v1.0.0/go.mod h1:ZVVdQEZoIme9iO1Ch2Jdy24qqXrMMOU6lpPAyBWyWuQ=
 github.com/tidwall/btree v0.4.2 h1:aLwwJlG+InuFzdAPuBf9YCAR1LvSQ9zhC5aorFPlIPs=
 github.com/tidwall/btree v0.4.2/go.mod h1:huei1BkDWJ3/sLXmO+bsCNELL+Bp2Kks9OLyQFkzvA8=
-github.com/tidwall/buntdb v1.2.2 h1:46G3ulKw8NYo0JAvsZkf7Xq1c8OHOPRuHQVTfL6z+lE=
-github.com/tidwall/buntdb v1.2.2/go.mod h1:+i/gBwYOHWG19wLgwMXFLkl00twh9+VWkkaOhuNQ4PA=
+github.com/tidwall/buntdb v1.2.3 h1:AoGVe4yrhKmnEPHrPrW5EUOATHOCIk4VtFvd8xn/ZtU=
+github.com/tidwall/buntdb v1.2.3/go.mod h1:+i/gBwYOHWG19wLgwMXFLkl00twh9+VWkkaOhuNQ4PA=
 github.com/tidwall/gjson v1.7.4 h1:19cchw8FOxkG5mdLRkGf9jqIqEyqdZhPqW60XfyFxk8=
 github.com/tidwall/gjson v1.7.4/go.mod h1:5/xDoumyyDNerp2U36lyolv46b3uF/9Bu6OfyQ9GImk=
 github.com/tidwall/grect v0.1.1 h1:+kMEkxhoqB7rniVXzMEIA66XwU07STgINqxh+qVIndY=
