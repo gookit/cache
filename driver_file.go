@@ -90,7 +90,7 @@ func (c *FileCache) get(key string) interface{} {
 	}
 
 	// has been expired. delete it.
-	c.lastErr = c.Del(key)
+	c.lastErr = c.del(key)
 	return nil
 }
 

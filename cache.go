@@ -30,6 +30,8 @@ type Cache interface {
 const (
 	// 永远存在
 	Forever = 0
+	// 2 秒钟
+	TwoSeconds = 2 * time.Second
 	// 1 分钟
 	OneMinutes = 60 * time.Second
 	// 2 分钟

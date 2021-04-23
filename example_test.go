@@ -2,6 +2,7 @@ package cache
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/gookit/cache/redis"
 )
@@ -38,12 +39,18 @@ func ExampleMemoryCache() {
 	key := "name"
 
 	// set
-	c.Set(key, "cache value", TwoMinutes)
+	c.Set(key, "cache value", TwoSeconds)
 	fmt.Println(c.Has(key), c.Count())
 
 	// get
 	val := c.Get(key)
 	fmt.Println(val)
+
+	time.Sleep(TwoSeconds)
+
+	// get expired
+	val2 := c.Get(key)
+	fmt.Println(val2)
 
 	// del
 	c.Del(key)
@@ -52,6 +59,7 @@ func ExampleMemoryCache() {
 	// Output:
 	// true 1
 	// cache value
+	// <nil>
 	// false 0
 }
 
@@ -60,12 +68,18 @@ func ExampleFileCache() {
 	key := "name"
 
 	// set
-	c.Set(key, "cache value", TwoMinutes)
+	c.Set(key, "cache value", TwoSeconds)
 	fmt.Println(c.Has(key))
 
 	// get
 	val := c.Get(key)
 	fmt.Println(val)
+
+	time.Sleep(TwoSeconds)
+
+	// get expired
+	val2 := c.Get(key)
+	fmt.Println(val2)
 
 	// del
 	c.Del(key)
@@ -74,5 +88,6 @@ func ExampleFileCache() {
 	// Output:
 	// true
 	// cache value
+	// <nil>
 	// false
 }

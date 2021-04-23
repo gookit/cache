@@ -54,7 +54,7 @@ func (c *MemoryCache) get(key string) interface{} {
 		}
 
 		// has been expired. delete it.
-		_ = c.Del(key)
+		_ = c.del(key)
 	}
 
 	return nil
