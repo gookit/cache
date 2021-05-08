@@ -15,15 +15,18 @@ Golang 通用的缓存管理使用库。
 
 **支持的驱动:**
 
-- file 简单的文件缓存(当前包的内置实现)
-- memory 简单的内存缓存(当前包的内置实现)
-- `redis`  by `github.com/gomodule/redigo`
-- `memCached` by `github.com/bradfitz/gomemcache`
-- `buntdb` by `github.com/tidwall/buntdb`
-- `boltdb`  by `github.com/etcd-io/bbolt`
-- `badger db` by `github.com/dgraph-io/badger`
-- `nutsdb` by `github.com/xujiajun/nutsdb`
-- `goleveldb` by `github.com/syndtr/goleveldb`
+- file 简单的文件缓存(_当前包的内置实现_)
+- memory 简单的内存缓存(_当前包的内置实现_)
+- `redis` https://github.com/gomodule/redigo
+- `memcached` https://github.com/bradfitz/gomemcache
+- `buntdb` https://github.com/tidwall/buntdb
+- `boltdb`  https://github.com/etcd-io/bbolt
+- `badger` https://github.com/dgraph-io/badger
+- `nutsdb` https://github.com/xujiajun/nutsdb
+- `goleveldb` https://github.com/syndtr/goleveldb
+- `gcache` https://github.com/bluele/gcache
+- `gocache` https://github.com/patrickmn/go-cache
+- https://github.com/allegro/bigcache
 
 ## GoDoc
 

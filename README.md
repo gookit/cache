@@ -15,14 +15,15 @@ Generic cache use and cache manager for golang. Provide a unified usage API by p
 
 - file internal driver
 - memory internal driver
-- `redis`  by `github.com/gomodule/redigo`
-- `memCached` by `github.com/bradfitz/gomemcache`
-- `buntdb` by `github.com/tidwall/buntdb`
-- `boltdb`  by `github.com/etcd-io/bbolt`
-- `badger db` by `github.com/dgraph-io/badger`
-- `nutsdb` by `github.com/xujiajun/nutsdb`
-- `goleveldb` by `github.com/syndtr/goleveldb`
-- https://github.com/patrickmn/go-cache
+- `redis` https://github.com/gomodule/redigo
+- `memcached` https://github.com/bradfitz/gomemcache
+- `buntdb` https://github.com/tidwall/buntdb
+- `boltdb`  https://github.com/etcd-io/bbolt
+- `badger` https://github.com/dgraph-io/badger
+- `nutsdb` https://github.com/xujiajun/nutsdb
+- `goleveldb` https://github.com/syndtr/goleveldb
+- `gcache` https://github.com/bluele/gcache
+- `gocache` https://github.com/patrickmn/go-cache
 - https://github.com/allegro/bigcache
 
 ## GoDoc
