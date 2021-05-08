@@ -1,7 +1,5 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: ''
+name: Bug report about: Create a report to help us improve title: ''
 labels: ''
 assignees: inhere
 
@@ -9,9 +7,9 @@ assignees: inhere
 
 **System (please complete the following information):**
 
- - OS: `linux` [e.g. linux, macOS]
- - GO Version: `1.13` [e.g. `1.13`]
- - Pkg Version: `1.1.1` [e.g. `1.1.1`]
+- OS: `linux` [e.g. linux, macOS]
+- GO Version: `1.13` [e.g. `1.13`]
+- Pkg Version: `1.1.1` [e.g. `1.1.1`]
 
 **Describe the bug**
 

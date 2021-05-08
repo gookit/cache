@@ -1,8 +1,9 @@
 package gocache
 
 import (
-	goc "github.com/patrickmn/go-cache"
 	"time"
+
+	goc "github.com/patrickmn/go-cache"
 )
 
 type GoCache struct {
