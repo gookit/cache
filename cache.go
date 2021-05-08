@@ -28,35 +28,62 @@ type Cache interface {
 
 // some generic expire time define.
 const (
-	// 永远存在
+	// Always exist
 	Forever = 0
-	// 1 分钟
+	// 1 second
+	Seconds1 = time.Second
+	// 2 second
+	Seconds2 = 2*time.Second
+	// 3 second
+	Seconds3 = 3*time.Second
+	// 5 second
+	Seconds5 = 5*time.Second
+	// 6 second
+	Seconds6 = 6*time.Second
+	// 7 second
+	Seconds7 = 7*time.Second
+	// 8 second
+	Seconds8 = 8*time.Second
+	// 9 second
+	Seconds9 = 9*time.Second
+	// 10 second
+	Seconds10 = 10*time.Second
+	// 15 second
+	Seconds15 = 15*time.Second
+	// 20 second
+	Seconds20 = 20*time.Second
+	// 30 second
+	Seconds30 = 30*time.Second
+
+	// 1 minutes
 	OneMinutes = 60 * time.Second
-	// 2 分钟
+	// 2 minutes
 	TwoMinutes = 120 * time.Second
-	// 3 分钟
+	// 3 minutes
 	ThreeMinutes = 180 * time.Second
-	// 5 分钟
+	// 5 minutes
 	FiveMinutes = 300 * time.Second
-	// 10 分钟
+	// 10 minutes
 	TenMinutes = 600 * time.Second
-	// 半小时
+	// 15 minutes
+	FifteenMinutes = 900 * time.Second
+	// half an hour
 	HalfHour = 1800 * time.Second
-	// 1 小时
+	// 1 hour
 	OneHour = 3600 * time.Second
-	// 2 小时
+	// 2 hours
 	TwoHour = 7200 * time.Second
-	// 3 小时
+	// 3 hours
 	ThreeHour = 10800 * time.Second
-	// 12 小时(半天)
+	// 12 hours(half of the day)
 	HalfDay = 43200 * time.Second
-	// 24 小时(1 天)
+	// 24 hours(1 day)
 	OneDay = 86400 * time.Second
-	// 2 天
+	// 2 day
 	TwoDay = 172800 * time.Second
-	// 3 天
+	// 3 day
 	ThreeDay = 259200 * time.Second
-	// 7 天(一周)
+	// 7 day(one week)
 	OneWeek = 604800 * time.Second
 )
 

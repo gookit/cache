@@ -13,6 +13,8 @@ type MemoryCache struct {
 	caches map[string]*Item
 	// last error
 	lastErr error
+	// TODO set max cache number
+	MaxCacheNum int
 }
 
 // Item for memory cache

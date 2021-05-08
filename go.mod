@@ -13,6 +13,7 @@ require (
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/stretchr/testify v1.4.0
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/tidwall/buntdb v1.2.3
 	go.etcd.io/bbolt v1.3.5

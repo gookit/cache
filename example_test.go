@@ -1,44 +1,45 @@
-package cache
+package cache_test
 
 import (
 	"fmt"
 
+	"github.com/gookit/cache"
 	"github.com/gookit/cache/redis"
 )
 
 func Example() {
 	// register some cache driver
-	Register(DvrFile, NewFileCache(""))
-	Register(DvrMemory, NewMemoryCache())
-	Register(DvrRedis, redis.Connect("127.0.0.1:6379", "", 0))
+	cache.Register(cache.DvrFile, cache.NewFileCache(""))
+	cache.Register(cache.DvrMemory, cache.NewMemoryCache())
+	cache.Register(cache.DvrRedis, redis.Connect("127.0.0.1:6379", "", 0))
 
 	// setting default driver name
-	DefaultUse(DvrRedis)
+	cache.DefaultUse(cache.DvrRedis)
 
 	// quick use.(it is default driver)
 	//
 	// set
-	_ = Set("name", "cache value", TwoMinutes)
+	_ = cache.Set("name", "cache value", cache.TwoMinutes)
 	// get
-	val := Get("name")
+	val := cache.Get("name")
 	// del
-	_ = Del("name")
+	_ = cache.Del("name")
 
 	// get: "cache value"
 	fmt.Print(val)
 
 	// More ...
-	// fc := GetCache(DvrFile)
+	// fc := cache.GetCache(DvrFile)
 	// fc.Set("key", "value", 10)
 	// fc.Get("key")
 }
 
 func ExampleMemoryCache() {
-	c := NewMemoryCache()
+	c := cache.NewMemoryCache()
 	key := "name"
 
 	// set
-	c.Set(key, "cache value", TwoMinutes)
+	c.Set(key, "cache value", cache.TwoMinutes)
 	fmt.Println(c.Has(key), c.Count())
 
 	// get
@@ -56,11 +57,11 @@ func ExampleMemoryCache() {
 }
 
 func ExampleFileCache() {
-	c := NewFileCache("./testdata")
+	c := cache.NewFileCache("./testdata")
 	key := "name"
 
 	// set
-	c.Set(key, "cache value", TwoMinutes)
+	c.Set(key, "cache value", cache.TwoMinutes)
 	fmt.Println(c.Has(key))
 
 	// get
