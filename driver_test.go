@@ -2,6 +2,7 @@ package cache_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/gookit/cache"
 	"github.com/stretchr/testify/assert"
@@ -25,6 +26,22 @@ func TestNewMemoryCache(t *testing.T) {
 	err = c.Del(key)
 	is.NoError(err)
 	is.False(c.Has(key))
+}
+
+func TestMemoryCache_Get_expired(t *testing.T) {
+	is := assert.New(t)
+	c := cache.NewMemoryCache()
+
+	key := "key"
+	is.False(c.Has(key))
+
+	err := c.Set(key, "value", cache.Seconds1)
+	is.NoError(err)
+	is.Equal("value", c.Get(key))
+
+	time.Sleep(cache.Seconds2)
+
+	is.Nil(c.Get(key))
 }
 
 func TestNewFileCache(t *testing.T) {
