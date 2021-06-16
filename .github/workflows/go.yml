@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         go_version: [1.13, 1.14, 1.15, 1.16]
-        os: [ ubuntu-latest, windows-latest, macOS-latest ]
+        os: [ ubuntu-latest, macOS-latest ] # , windows-latest
 
     services:
       # https://docs.github.com/en/actions/guides/creating-redis-service-containers
