@@ -15,8 +15,7 @@ Golang 通用的缓存管理使用库。
 
 **支持的驱动:**
 
-- file 简单的文件缓存(_当前包的内置实现_)
-- memory 简单的内存缓存(_当前包的内置实现_)
+- `goredis` https://github.com/go-redis/redis
 - `redis` https://github.com/gomodule/redigo
 - `memcached` https://github.com/bradfitz/gomemcache
 - `buntdb` https://github.com/tidwall/buntdb
@@ -26,7 +25,12 @@ Golang 通用的缓存管理使用库。
 - `goleveldb` https://github.com/syndtr/goleveldb
 - `gcache` https://github.com/bluele/gcache
 - `gocache` https://github.com/patrickmn/go-cache
-- https://github.com/allegro/bigcache
+- `bigcache` https://github.com/allegro/bigcache
+
+internal:
+
+- file 简单的文件缓存(_当前包的内置实现_)
+- memory 简单的内存缓存(_当前包的内置实现_)
 
 ## GoDoc
 
@@ -68,7 +72,9 @@ package main
 
 import (
 	"fmt"
+	
 	"github.com/gookit/cache"
+	"github.com/gookit/cache/goredis"
 	"github.com/gookit/cache/redis"
 )
 
@@ -77,9 +83,10 @@ func main() {
 	cache.Register(cache.DvrFile, cache.NewFileCache(""))
 	cache.Register(cache.DvrMemory, cache.NewMemoryCache())
 	cache.Register(cache.DvrRedis, redis.Connect("127.0.0.1:6379", "", 0))
-	
+	cache.Register(goredis.Name, goredis.Connect("127.0.0.1:6379", "", 0))
+
 	// 设置默认驱动名称
-	cache.SetDefName(cache.DvrRedis)
+	cache.DefaultUse(cache.DvrRedis)
 
 	// 快速使用（默认驱动）
 	//

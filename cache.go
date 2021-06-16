@@ -5,28 +5,13 @@ package cache
 
 import (
 	"encoding/json"
-	"io"
 	"time"
+
+	"github.com/gookit/gsr"
 )
 
 // Cache interface definition
-type Cache interface {
-	// Closer close
-	io.Closer
-	// Clear clear
-	Clear() error
-
-	// Has basic operation
-	Has(key string) bool
-	Get(key string) interface{}
-	Set(key string, val interface{}, ttl time.Duration) (err error)
-	Del(key string) error
-
-	// GetMulti multi operation
-	GetMulti(keys []string) map[string]interface{}
-	SetMulti(values map[string]interface{}, ttl time.Duration) (err error)
-	DelMulti(keys []string) error
-}
+type Cache = gsr.SimpleCacher
 
 // some generic expire time define.
 const (
@@ -90,11 +75,13 @@ const (
 	OneWeek = 604800 * time.Second
 )
 
-// MarshalFunc define
-type MarshalFunc func(v interface{}) ([]byte, error)
+type (
+	// MarshalFunc define
+	MarshalFunc func(v interface{}) ([]byte, error)
 
-// UnmarshalFunc define
-type UnmarshalFunc func(data []byte, v interface{}) error
+	// UnmarshalFunc define
+	UnmarshalFunc func(data []byte, v interface{}) error
+)
 
 // data (Un)marshal func
 var (
@@ -103,54 +90,108 @@ var (
 )
 
 /*************************************************************
+ * base driver
+ *************************************************************/
+
+// BaseDriver struct
+type BaseDriver struct {
+	Debug bool
+	Logger gsr.Printer
+	// Prefix key prefix
+	Prefix string
+	// last error
+	lastErr error
+}
+
+// Debugf print an debug message
+func (l *BaseDriver) Debugf(format string, v ...interface{}) {
+	if l.Debug && l.Logger != nil {
+		l.Logger.Printf(format, v...)
+	}
+}
+
+// Logf print an log message
+func (l *BaseDriver) Logf(format string, v ...interface{}) {
+	if l.Logger != nil {
+		l.Logger.Printf(format, v...)
+	}
+}
+
+// Key Cache key build
+func (l *BaseDriver) Key(key string) string {
+	if l.Prefix != "" {
+		return l.Prefix + ":" + key
+	}
+	return key
+}
+
+// SetLastErr save last error
+func (l *BaseDriver) SetLastErr(err error) {
+	if err != nil {
+		l.lastErr = err
+		l.Logf("redis error: %s\n", err.Error())
+	}
+}
+
+// LastErr get
+func (l *BaseDriver) LastErr(key string) error {
+	return l.lastErr
+}
+
+/*************************************************************
  * config default cache manager
  *************************************************************/
 
 // default cache driver manager instance
-var defMgr = NewManager()
+var std = NewManager()
 
 // Register driver to manager instance
 func Register(name string, driver Cache) *Manager {
-	defMgr.DefaultUse(name)
-	defMgr.Register(name, driver)
-	return defMgr
+	std.DefaultUse(name)
+	std.Register(name, driver)
+	return std
 }
 
 // SetDefName set default driver name.
 // Deprecated
 //  please use DefaultUse() instead it
 func SetDefName(driverName string) {
-	defMgr.DefaultUse(driverName)
+	std.DefaultUse(driverName)
 }
 
 // DefaultUse set default driver name
 func DefaultUse(driverName string) {
-	defMgr.DefaultUse(driverName)
+	std.DefaultUse(driverName)
 }
 
 // Use driver object by name and set it as default driver.
 func Use(driverName string) Cache {
-	return defMgr.Use(driverName)
+	return std.Use(driverName)
 }
 
 // GetCache returns a driver instance by name. alias of Driver()
 func GetCache(driverName string) Cache {
-	return defMgr.Cache(driverName)
+	return std.Cache(driverName)
 }
 
 // Driver get a driver instance by name
 func Driver(driverName string) Cache {
-	return defMgr.Driver(driverName)
+	return std.Driver(driverName)
 }
 
 // DefManager get default cache manager instance
 func DefManager() *Manager {
-	return defMgr
+	return std
 }
 
 // Default get default cache driver instance
 func Default() Cache {
-	return defMgr.Default()
+	return std.Default()
+}
+
+// Close all drivers
+func Close() error {
+	return std.Close()
 }
 
 /*************************************************************
@@ -159,40 +200,40 @@ func Default() Cache {
 
 // Has cache key
 func Has(key string) bool {
-	return defMgr.Default().Has(key)
+	return std.Default().Has(key)
 }
 
 // Get value by key
 func Get(key string) interface{} {
-	return defMgr.Default().Get(key)
+	return std.Default().Get(key)
 }
 
 // Set value by key
 func Set(key string, val interface{}, ttl time.Duration) error {
-	return defMgr.Default().Set(key, val, ttl)
+	return std.Default().Set(key, val, ttl)
 }
 
 // Del value by key
 func Del(key string) error {
-	return defMgr.Default().Del(key)
+	return std.Default().Del(key)
 }
 
 // GetMulti values by keys
 func GetMulti(keys []string) map[string]interface{} {
-	return defMgr.Default().GetMulti(keys)
+	return std.Default().GetMulti(keys)
 }
 
 // SetMulti values
 func SetMulti(mv map[string]interface{}, ttl time.Duration) error {
-	return defMgr.Default().SetMulti(mv, ttl)
+	return std.Default().SetMulti(mv, ttl)
 }
 
 // DelMulti values by keys
 func DelMulti(keys []string) error {
-	return defMgr.Default().DelMulti(keys)
+	return std.Default().DelMulti(keys)
 }
 
 // Clear all caches
 func Clear() error {
-	return defMgr.Default().Clear()
+	return std.Default().Clear()
 }

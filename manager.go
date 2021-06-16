@@ -77,6 +77,14 @@ func (m *Manager) DefName() string {
 	return m.defName
 }
 
+// Close all drivers
+func (m *Manager) Close() (err error) {
+	for _, cache := range m.drivers {
+		err = cache.Close()
+	}
+	return err
+}
+
 /*************************************************************
  * Quick use by default cache driver
  *************************************************************/

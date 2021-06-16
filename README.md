@@ -1,4 +1,4 @@
-# cache
+# Cache
 
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/gookit/cache?style=flat-square)
 [![GoDoc](https://godoc.org/github.com/gookit/cache?status.svg)](https://pkg.go.dev/github.com/gookit/cache)
@@ -9,12 +9,11 @@
 
 Generic cache use and cache manager for golang. Provide a unified usage API by packaging various commonly used drivers.
 
-> All cache driver implemented the cache.Cache interface. So, You can add any custom driver.
+> All cache driver implemented the `cache.Cache` interface. So, You can add any custom driver.
 
 **Supported Drivers:**
 
-- file internal driver
-- memory internal driver
+- `goredis` https://github.com/go-redis/redis
 - `redis` https://github.com/gomodule/redigo
 - `memcached` https://github.com/bradfitz/gomemcache
 - `buntdb` https://github.com/tidwall/buntdb
@@ -24,7 +23,12 @@ Generic cache use and cache manager for golang. Provide a unified usage API by p
 - `goleveldb` https://github.com/syndtr/goleveldb
 - `gcache` https://github.com/bluele/gcache
 - `gocache` https://github.com/patrickmn/go-cache
-- https://github.com/allegro/bigcache
+- `bigcache` https://github.com/allegro/bigcache
+
+internal:
+
+- file internal driver [driver_file.go](driver_file.go)
+- memory internal driver [driver_memory.go](driver_memory.go)
 
 ## GoDoc
 
@@ -33,6 +37,8 @@ Generic cache use and cache manager for golang. Provide a unified usage API by p
 - [godoc for github](https://pkg.go.dev/github.com/gookit/cache)
 
 ## Install
+
+The package supports 3 last Go versions and requires a Go version with modules support.
 
 ```bash
 go get github.com/gookit/cache
@@ -69,6 +75,7 @@ import (
 	"fmt"
 
 	"github.com/gookit/cache"
+	"github.com/gookit/cache/goredis"
 	"github.com/gookit/cache/redis"
 )
 
@@ -77,6 +84,7 @@ func main() {
 	cache.Register(cache.DvrFile, cache.NewFileCache(""))
 	cache.Register(cache.DvrMemory, cache.NewMemoryCache())
 	cache.Register(cache.DvrRedis, redis.Connect("127.0.0.1:6379", "", 0))
+	cache.Register(goredis.Name, goredis.Connect("127.0.0.1:6379", "", 0))
 
 	// setting default driver name
 	cache.DefaultUse(cache.DvrRedis)

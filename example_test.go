@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gookit/cache"
+	"github.com/gookit/cache/goredis"
 	"github.com/gookit/cache/redis"
 )
 
@@ -12,6 +13,7 @@ func Example() {
 	cache.Register(cache.DvrFile, cache.NewFileCache(""))
 	cache.Register(cache.DvrMemory, cache.NewMemoryCache())
 	cache.Register(cache.DvrRedis, redis.Connect("127.0.0.1:6379", "", 0))
+	cache.Register(goredis.Name, goredis.Connect("127.0.0.1:6379", "", 0))
 
 	// setting default driver name
 	cache.DefaultUse(cache.DvrRedis)
