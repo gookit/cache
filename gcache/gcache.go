@@ -8,8 +8,9 @@ type GCache struct {
 	db gcache.Cache
 }
 
+// New create an instance
 func New(size int) *GCache {
 	return &GCache{
-		db: gcache.New(20).LRU().Build(),
+		db: gcache.New(size).LRU().Build(),
 	}
 }
