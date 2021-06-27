@@ -1,4 +1,4 @@
-# cache
+# Cache
 
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/gookit/cache?style=flat-square)
 [![GoDoc](https://godoc.org/github.com/gookit/cache?status.svg)](https://pkg.go.dev/github.com/gookit/cache)
@@ -8,7 +8,6 @@
 > **[EN README](README.md)**
 
 Golang 通用的缓存管理使用库。
-
 通过包装各种常用的驱动，屏蔽掉底层各个驱动的不同使用方法，来提供统一的使用API。
 
 > 所有缓存驱动程序都实现了 `cache.Cache` 接口。 因此，您可以添加任何自定义驱动程序。
@@ -82,7 +81,7 @@ func main() {
 	// 注册一个（或多个）缓存驱动
 	cache.Register(cache.DvrFile, cache.NewFileCache(""))
 	cache.Register(cache.DvrMemory, cache.NewMemoryCache())
-	cache.Register(cache.DvrRedis, redis.Connect("127.0.0.1:6379", "", 0))
+	cache.Register(redis.Name, redis.Connect("127.0.0.1:6379", "", 0))
 	cache.Register(goredis.Name, goredis.Connect("127.0.0.1:6379", "", 0))
 
 	// 设置默认驱动名称
@@ -107,6 +106,22 @@ func main() {
 	// Out: "val"
 	fmt.Print(val)
 }
+```
+
+## 设置选项
+
+```go
+gords := goredis.Connect("127.0.0.1:6379", "", 0)
+gords.WithOptions(cache.WithPrefix("cache_"), cache.WithEncode(true))
+
+cache.Register(goredis.Name, gords)
+
+// set
+// real key is: "cache_name"
+cache.Set("name", "cache value", cache.TwoMinutes)
+
+// get: "cache value"
+val := cache.Get("name")
 ```
 
 ## License

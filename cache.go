@@ -4,7 +4,6 @@
 package cache
 
 import (
-	"encoding/json"
 	"time"
 
 	"github.com/gookit/gsr"
@@ -74,69 +73,6 @@ const (
 	// OneWeek 7 day(one week)
 	OneWeek = 604800 * time.Second
 )
-
-type (
-	// MarshalFunc define
-	MarshalFunc func(v interface{}) ([]byte, error)
-
-	// UnmarshalFunc define
-	UnmarshalFunc func(data []byte, v interface{}) error
-)
-
-// data (Un)marshal func
-var (
-	Marshal   MarshalFunc   = json.Marshal
-	Unmarshal UnmarshalFunc = json.Unmarshal
-)
-
-/*************************************************************
- * base driver
- *************************************************************/
-
-// BaseDriver struct
-type BaseDriver struct {
-	Debug bool
-	Logger gsr.Printer
-	// Prefix key prefix
-	Prefix string
-	// last error
-	lastErr error
-}
-
-// Debugf print an debug message
-func (l *BaseDriver) Debugf(format string, v ...interface{}) {
-	if l.Debug && l.Logger != nil {
-		l.Logger.Printf(format, v...)
-	}
-}
-
-// Logf print an log message
-func (l *BaseDriver) Logf(format string, v ...interface{}) {
-	if l.Logger != nil {
-		l.Logger.Printf(format, v...)
-	}
-}
-
-// Key Cache key build
-func (l *BaseDriver) Key(key string) string {
-	if l.Prefix != "" {
-		return l.Prefix + ":" + key
-	}
-	return key
-}
-
-// SetLastErr save last error
-func (l *BaseDriver) SetLastErr(err error) {
-	if err != nil {
-		l.lastErr = err
-		l.Logf("redis error: %s\n", err.Error())
-	}
-}
-
-// LastErr get
-func (l *BaseDriver) LastErr(key string) error {
-	return l.lastErr
-}
 
 /*************************************************************
  * config default cache manager

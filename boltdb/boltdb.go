@@ -9,6 +9,8 @@ import (
 	"go.etcd.io/bbolt"
 )
 
+const Name = "boltDB"
+
 // BoltDB definition
 type BoltDB struct {
 	// db file path. eg "path/to/my.db"

@@ -1,5 +1,5 @@
 // Package redis is a simple redis cache implement.
-// base on the package: github.com/gomodule/redigo
+// base on the package: https://github.com/gomodule/redigo
 package redis
 
 import (
@@ -11,10 +11,14 @@ import (
 	"github.com/gookit/cache"
 )
 
+const Name = "redigo"
+
 // RedisCache fallback alias
-type RedisCache = RediGo
-// RediGo definition. redigo doc link: https://godoc.org/github.com/gomodule/redigo/redis
-type RediGo struct {
+type RedisCache = Redigo
+
+// Redigo driver definition.
+// redigo doc link: https://pkg.go.dev/github.com/gomodule/redigo/redis#pkg-examples
+type Redigo struct {
 	cache.BaseDriver
 	// redis connection pool
 	pool *redis.Pool
@@ -25,8 +29,8 @@ type RediGo struct {
 }
 
 // New redis cache
-func New(url, pwd string, dbNum int) *RediGo {
-	rc := &RediGo{
+func New(url, pwd string, dbNum int) *Redigo {
+	rc := &Redigo{
 		url: url, pwd: pwd, dbNum: dbNum,
 	}
 
@@ -34,12 +38,12 @@ func New(url, pwd string, dbNum int) *RediGo {
 }
 
 // Connect create and connect to redis server
-func Connect(url, pwd string, dbNum int) *RediGo {
+func Connect(url, pwd string, dbNum int) *Redigo {
 	return New(url, pwd, dbNum).Connect()
 }
 
 // Connect to redis server
-func (c *RediGo) Connect() *RediGo {
+func (c *Redigo) Connect() *Redigo {
 	c.pool = newPool(c.url, c.pwd, c.dbNum)
 	c.Logf("connect to server %s db is %d", c.url, c.dbNum)
 
@@ -51,34 +55,31 @@ func (c *RediGo) Connect() *RediGo {
  *************************************************************/
 
 // Get value by key
-func (c *RediGo) Get(key string) interface{} {
-	val, err := c.exec("Get", c.Key(key))
-	if err != nil {
-		c.SetLastErr(err)
-		return nil
-	}
+func (c *Redigo) Get(key string) interface{} {
+	val, err := redis.Bytes(c.exec("Get", c.Key(key)))
 
-	return val
+	return c.Unmarshal(val, err)
 }
 
 // Set value by key
-func (c *RediGo) Set(key string, val interface{}, ttl time.Duration) (err error) {
-	// bs, _ := cache.Marshal(val)
-	// _, err = c.exec("SetEx", c.Key(key), int64(ttl/time.Second), bs)
+func (c *Redigo) Set(key string, val interface{}, ttl time.Duration) (err error) {
+	val, err = c.Marshal(val)
+	if err != nil {
+		return err
+	}
+
 	_, err = c.exec("SetEx", c.Key(key), int64(ttl/time.Second), val)
 	return
 }
 
 // Del value by key
-func (c *RediGo) Del(key string) (err error) {
+func (c *Redigo) Del(key string) (err error) {
 	_, err = c.exec("Del", c.Key(key))
-	c.SetLastErr(err)
-
 	return
 }
 
 // Has cache key
-func (c *RediGo) Has(key string) bool {
+func (c *Redigo) Has(key string) bool {
 	// return 0 OR 1
 	one, err := redis.Int(c.exec("Exists", c.Key(key)))
 	c.SetLastErr(err)
@@ -87,16 +88,16 @@ func (c *RediGo) Has(key string) bool {
 }
 
 // GetMulti values by keys
-func (c *RediGo) GetMulti(keys []string) map[string]interface{} {
+func (c *Redigo) GetMulti(keys []string) map[string]interface{} {
 	conn := c.pool.Get()
 	defer conn.Close()
 
-	var args []interface{}
+	args := make([]interface{}, 0, len(keys))
 	for _, key := range keys {
 		args = append(args, c.Key(key))
 	}
 
-	list, err := redis.Values(conn.Do("MGet", args...))
+	list, err := redis.Values(c.exec("MGet", args...))
 	if err != nil {
 		c.SetLastErr(err)
 		return nil
@@ -111,7 +112,7 @@ func (c *RediGo) GetMulti(keys []string) map[string]interface{} {
 }
 
 // SetMulti values
-func (c *RediGo) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+func (c *Redigo) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
 	conn := c.pool.Get()
 	defer conn.Close()
 
@@ -133,29 +134,24 @@ func (c *RediGo) SetMulti(values map[string]interface{}, ttl time.Duration) (err
 }
 
 // DelMulti values by keys
-func (c *RediGo) DelMulti(keys []string) (err error) {
-	conn := c.pool.Get()
-	defer conn.Close()
-
-	var args []interface{}
+func (c *Redigo) DelMulti(keys []string) (err error) {
+	args := make([]interface{}, 0, len(keys))
 	for _, key := range keys {
 		args = append(args, c.Key(key))
 	}
 
-	_, err = conn.Do("Del", args...)
+	_, err = c.exec("Del", args...)
 	return
 }
 
 // Close connection
-func (c *RediGo) Close() error {
+func (c *Redigo) Close() error {
 	return c.pool.Close()
 }
 
 // Clear all caches
-func (c *RediGo) Clear() error {
-	conn := c.pool.Get()
-	defer conn.Close()
-	_, err := conn.Do("FlushDb")
+func (c *Redigo) Clear() error {
+	_, err := c.exec("FlushDb")
 	return err
 }
 
@@ -164,14 +160,14 @@ func (c *RediGo) Clear() error {
  *************************************************************/
 
 // Pool get
-func (c *RediGo) Pool() *redis.Pool {
+func (c *Redigo) Pool() *redis.Pool {
 	return c.pool
 }
 
 // String get
-func (c *RediGo) String() string {
+func (c *Redigo) String() string {
 	pwd := "*"
-	if c.Debug {
+	if c.IsDebug() {
 		pwd = c.pwd
 	}
 
@@ -179,7 +175,7 @@ func (c *RediGo) String() string {
 }
 
 // actually do the redis cmds, args[0] must be the key name.
-func (c *RediGo) exec(commandName string, args ...interface{}) (reply interface{}, err error) {
+func (c *Redigo) exec(commandName string, args ...interface{}) (reply interface{}, err error) {
 	if len(args) < 1 {
 		return nil, errors.New("missing required arguments")
 	}
@@ -187,7 +183,7 @@ func (c *RediGo) exec(commandName string, args ...interface{}) (reply interface{
 	conn := c.pool.Get()
 	defer conn.Close()
 
-	if c.Debug {
+	if c.IsDebug() {
 		st := time.Now()
 		reply, err = conn.Do(commandName, args...)
 		c.Logf(

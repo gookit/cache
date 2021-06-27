@@ -10,6 +10,7 @@ import (
 
 // Memory open a file that does not persist to disk.
 const Memory = ":memory:"
+const Name = "buntDB"
 
 // BuntDB definition.
 type BuntDB struct {

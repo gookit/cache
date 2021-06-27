@@ -7,6 +7,7 @@ import (
 
 // MemoryCache definition.
 type MemoryCache struct {
+	BaseDriver
 	// locker
 	lock sync.RWMutex
 	// cache data in memory. or use sync.Map
@@ -162,9 +163,4 @@ func (c *MemoryCache) DumpDB(file string) error {
 // Iter iteration all caches
 func (c *MemoryCache) Iter(file string) error {
 	return nil
-}
-
-// LastErr get
-func (c *MemoryCache) LastErr() error {
-	return c.lastErr
 }

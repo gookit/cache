@@ -83,11 +83,11 @@ func main() {
 	// register one(or some) cache driver
 	cache.Register(cache.DvrFile, cache.NewFileCache(""))
 	cache.Register(cache.DvrMemory, cache.NewMemoryCache())
-	cache.Register(cache.DvrRedis, redis.Connect("127.0.0.1:6379", "", 0))
+	cache.Register(redis.Name, redis.Connect("127.0.0.1:6379", "", 0))
 	cache.Register(goredis.Name, goredis.Connect("127.0.0.1:6379", "", 0))
 
 	// setting default driver name
-	cache.DefaultUse(cache.DvrRedis)
+	cache.DefaultUse(redis.Name)
 
 	// quick use.(it is default driver)
 	//
@@ -106,6 +106,22 @@ func main() {
 	// fc.Set("key", "value", 10)
 	// fc.Get("key")
 }
+```
+
+## With Options
+
+```go
+gords := goredis.Connect("127.0.0.1:6379", "", 0)
+gords.WithOptions(cache.WithPrefix("cache_"), cache.WithEncode(true))
+
+cache.Register(goredis.Name, gords)
+
+// set
+// real key is: "cache_name"
+cache.Set("name", "cache value", cache.TwoMinutes)
+
+// get: "cache value"
+val := cache.Get("name")
 ```
 
 ## License

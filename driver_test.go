@@ -1,10 +1,13 @@
 package cache_test
 
 import (
+	"math/rand"
+	"strconv"
 	"testing"
 	"time"
 
 	"github.com/gookit/cache"
+	"github.com/gookit/goutil/dump"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -28,7 +31,34 @@ func TestNewMemoryCache(t *testing.T) {
 	is.False(c.Has(key))
 }
 
-func TestMemoryCache_Get_expired(t *testing.T) {
+func TestMemoryCache_object(t *testing.T) {
+	is := assert.New(t)
+
+	type user struct {
+		Age int
+		Name string
+	}
+	b1 := user {
+		Age: 1,
+		Name: "inhere",
+	}
+
+	c := cache.NewMemoryCache()
+
+	key := randomKey()
+	t.Log("cache key:", key)
+	is.False(c.Has(key))
+
+	err := c.Set(key, b1, cache.Seconds3)
+	is.NoError(err)
+	is.True(c.Has(key))
+
+	b2 := c.Get(key).(user)
+	dump.P(b2)
+	is.Equal("inhere", b2.Name)
+}
+
+func TestMemoryCache_expired(t *testing.T) {
 	is := assert.New(t)
 	c := cache.NewMemoryCache()
 
@@ -47,8 +77,8 @@ func TestMemoryCache_Get_expired(t *testing.T) {
 func TestNewFileCache(t *testing.T) {
 	is := assert.New(t)
 	c := cache.NewFileCache("./testdata")
-	key := "key"
 
+	key := "key"
 	is.False(c.Has(key))
 
 	// set
@@ -67,4 +97,9 @@ func TestNewFileCache(t *testing.T) {
 	err = c.Del(key)
 	is.NoError(err)
 	is.False(c.Has(key))
+}
+
+func randomKey() string {
+	rand.Seed(time.Now().UnixNano())
+	return "k" + time.Now().Format("20060102") + strconv.Itoa(rand.Intn(999))
 }

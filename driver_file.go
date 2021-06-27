@@ -3,10 +3,10 @@ package cache
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -17,7 +17,7 @@ type FileCache struct {
 	// cache directory path
 	cacheDir string
 	// cache file prefix
-	prefix string
+	// prefix string
 	// security key for generate cache file name.
 	securityKey string
 }
@@ -35,7 +35,8 @@ func NewFileCache(dir string, pfxAndKey ...string) *FileCache {
 	}
 
 	if ln := len(pfxAndKey); ln > 0 {
-		c.prefix = pfxAndKey[0]
+		// c.prefix = pfxAndKey[0]
+		c.opt.Prefix = pfxAndKey[0]
 
 		if ln > 1 {
 			c.securityKey = pfxAndKey[1]
@@ -73,13 +74,13 @@ func (c *FileCache) get(key string) interface{} {
 	// read cache from file
 	bs, err := ioutil.ReadFile(c.GetFilename(key))
 	if err != nil {
-		c.lastErr = err
+		c.SetLastErr(err)
 		return nil
 	}
 
 	item := &Item{}
-	if err = Unmarshal(bs, item); err != nil {
-		c.lastErr = err
+	if err = c.MustUnmarshal(bs, item); err != nil {
+		c.SetLastErr(err)
 		return nil
 	}
 
@@ -90,7 +91,7 @@ func (c *FileCache) get(key string) interface{} {
 	}
 
 	// has been expired. delete it.
-	c.lastErr = c.del(key)
+	c.SetLastErr(c.del(key))
 	return nil
 }
 
@@ -104,21 +105,21 @@ func (c *FileCache) Set(key string, val interface{}, ttl time.Duration) (err err
 
 func (c *FileCache) set(key string, val interface{}, ttl time.Duration) (err error) {
 	if err = c.MemoryCache.set(key, val, ttl); err != nil {
-		c.lastErr = err
+		c.SetLastErr(err)
 		return
 	}
 
 	// cache item data to file
-	bs, err := Marshal(c.caches[key])
+	bs, err := c.MustMarshal(c.caches[key])
 	if err != nil {
-		c.lastErr = err
+		c.SetLastErr(err)
 		return
 	}
 
 	file := c.GetFilename(key)
 	dir := filepath.Dir(file)
 	if err = os.MkdirAll(dir, 0755); err != nil {
-		c.lastErr = err
+		c.SetLastErr(err)
 		return
 	}
 
@@ -144,7 +145,9 @@ func (c *FileCache) Del(key string) error {
 }
 
 func (c *FileCache) del(key string) error {
-	c.lastErr = c.MemoryCache.del(key)
+	if err := c.MemoryCache.del(key); err != nil {
+		return err
+	}
 
 	file := c.GetFilename(key)
 	if fileExists(file) {
@@ -177,7 +180,6 @@ func (c *FileCache) SetMulti(values map[string]interface{}, ttl time.Duration) (
 			return
 		}
 	}
-
 	return
 }
 
@@ -227,7 +229,13 @@ func (c *FileCache) GetFilename(key string) string {
 
 	str := hex.EncodeToString(h.Sum(nil))
 
-	return fmt.Sprintf("%s/%s/%s.data", c.cacheDir, str[0:6], c.prefix+str)
+	// return fmt.Sprintf("%s/%s/%s.data", c.cacheDir, str[0:6], c.prefix+str)
+	return strings.Join([]string{
+		c.cacheDir,
+		str[0:6],
+		c.opt.Prefix+str,
+		".data",
+	}, "/")
 }
 
 // fileExists reports whether the named file or directory exists.

@@ -45,7 +45,7 @@ func New(url, pwd string, dbNum int) *GoRedis {
 // String get
 func (c *GoRedis) String() string {
 	pwd := "*"
-	if c.Debug {
+	if c.IsDebug() {
 		pwd = c.pwd
 	}
 
@@ -91,17 +91,18 @@ func (c *GoRedis) Has(key string) bool {
 
 // Get cache by key
 func (c *GoRedis) Get(key string) interface{} {
-	str, err := c.rdb.Get(CtxForExec, c.Key(key)).Result()
-	if err != nil {
-		c.SetLastErr(err)
-		return nil
-	}
+	bts, err := c.rdb.Get(CtxForExec, c.Key(key)).Bytes()
 
-	return str
+	return c.Unmarshal(bts, err)
 }
 
 // Set cache by key
 func (c *GoRedis) Set(key string, val interface{}, ttl time.Duration) (err error) {
+	val, err = c.Marshal(val)
+	if err != nil {
+		return err
+	}
+
 	return c.rdb.SetEX(CtxForExec, c.Key(key), val, ttl).Err()
 }
 

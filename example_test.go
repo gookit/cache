@@ -6,13 +6,14 @@ import (
 	"github.com/gookit/cache"
 	"github.com/gookit/cache/goredis"
 	"github.com/gookit/cache/redis"
+	"github.com/gookit/goutil/dump"
 )
 
 func Example() {
 	// register some cache driver
 	cache.Register(cache.DvrFile, cache.NewFileCache(""))
 	cache.Register(cache.DvrMemory, cache.NewMemoryCache())
-	cache.Register(cache.DvrRedis, redis.Connect("127.0.0.1:6379", "", 0))
+	cache.Register(redis.Name, redis.Connect("127.0.0.1:6379", "", 0))
 	cache.Register(goredis.Name, goredis.Connect("127.0.0.1:6379", "", 0))
 
 	// setting default driver name
@@ -78,4 +79,21 @@ func ExampleFileCache() {
 	// true
 	// cache value
 	// false
+}
+
+func Example_withOptions() {
+	gords := goredis.Connect("127.0.0.1:6379", "", 0)
+	gords.WithOptions(cache.WithPrefix("cache_"), cache.WithEncode(true))
+
+	// register
+	cache.Register(goredis.Name, gords)
+
+	// set
+	// real key is: "cache_name"
+	cache.Set("name", "cache value", cache.TwoMinutes)
+
+	// get: "cache value"
+	val := cache.Get("name")
+
+	dump.P(val)
 }
