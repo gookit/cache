@@ -75,7 +75,7 @@ func (l *BaseDriver) WithOptions(optFns ...func(option *Option)) {
 
 // MustMarshal cache value
 func (l *BaseDriver) MustMarshal(val interface{}) ([]byte, error) {
-	if Marshal != nil {
+	if Marshal == nil {
 		return nil, errNoMarshal
 	}
 	return Marshal(val)
@@ -92,7 +92,7 @@ func (l *BaseDriver) Marshal(val interface{}) (interface{}, error) {
 
 // MustUnmarshal cache value
 func (l *BaseDriver) MustUnmarshal(bts []byte, ptr interface{}) error {
-	if Unmarshal != nil {
+	if Unmarshal == nil {
 		return errNoUnmarshal
 	}
 	return Unmarshal(bts, ptr)
