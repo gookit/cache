@@ -12,7 +12,7 @@ require (
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/gookit/goutil v0.3.14
-	github.com/gookit/gsr v0.0.2
+	github.com/gookit/gsr v0.0.3
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/stretchr/testify v1.7.0
