@@ -50,7 +50,7 @@ func (c *MemCached) Get(key string) (val interface{}) {
 		return
 	}
 
-	err = c.MustUnmarshal(item.Value, &val)
+	err = c.UnmarshalTo(item.Value, &val)
 	if err != nil {
 		return nil
 	}
@@ -89,7 +89,7 @@ func (c *MemCached) GetMulti(keys []string) map[string]interface{} {
 	values := make(map[string]interface{}, len(keys))
 	for key, item := range items {
 		var val interface{}
-		if err := c.MustUnmarshal(item.Value, &val); err != nil {
+		if err := c.UnmarshalTo(item.Value, &val); err != nil {
 			continue
 		}
 

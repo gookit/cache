@@ -43,7 +43,7 @@ func (c *BoltDB) Get(key string) interface{} {
 		b := tx.Bucket([]byte(c.Bucket))
 		bs := b.Get([]byte(key))
 
-		if err := c.MustUnmarshal(bs, &val); err != nil {
+		if err := c.UnmarshalTo(bs, &val); err != nil {
 			return err
 		}
 
@@ -53,7 +53,6 @@ func (c *BoltDB) Get(key string) interface{} {
 	if err != nil {
 		return nil
 	}
-
 	return val
 }
 

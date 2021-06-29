@@ -90,8 +90,8 @@ func (l *BaseDriver) Marshal(val interface{}) (interface{}, error) {
 	return val, nil
 }
 
-// MustUnmarshal cache value
-func (l *BaseDriver) MustUnmarshal(bts []byte, ptr interface{}) error {
+// UnmarshalTo cache value
+func (l *BaseDriver) UnmarshalTo(bts []byte, ptr interface{}) error {
 	if Unmarshal == nil {
 		return errNoUnmarshal
 	}
@@ -113,16 +113,6 @@ func (l *BaseDriver) Unmarshal(val []byte, err error) interface{} {
 	}
 
 	return val
-}
-
-// GetAs get cache value and decode value to object ptr
-func (l *BaseDriver) GetAs(key string, ptr interface{}) error {
-	// TODO bts, err := c.Get(key)
-	// if Unmarshal != nil {
-	// 	err := Unmarshal(bts, ptr)
-	// 	return err
-	// }
-	panic("please implement me")
 }
 
 // Key real cache key build

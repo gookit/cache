@@ -29,7 +29,26 @@ type Manager struct {
 func NewManager() *Manager {
 	return &Manager{
 		// defName: driverName,
-		drivers: make(map[string]Cache),
+		drivers: make(map[string]Cache, 8),
+	}
+}
+
+// Register new cache driver
+func (m *Manager) Register(name string, driver Cache) *Manager {
+	// always use latest as default driver.
+	m.defName = name
+	// save driver instance
+	m.drivers[name] = driver
+	return m
+}
+
+// Unregister an cache driver
+func (m *Manager) Unregister(name string) {
+	delete(m.drivers, name)
+
+	// reset default driver name.
+	if m.defName == name {
+		m.defName = ""
 	}
 }
 
@@ -37,23 +56,25 @@ func NewManager() *Manager {
 // Deprecated
 //  please use DefaultUse() instead it
 func (m *Manager) SetDefName(driverName string) {
-	m.defName = driverName
+	m.DefaultUse(driverName)
 }
 
 // DefaultUse set default driver name
 func (m *Manager) DefaultUse(driverName string) {
-	m.defName = driverName
-}
+	if _, ok := m.drivers[driverName]; !ok {
+		panic("cache driver: " + driverName + " is not registered")
+	}
 
-// Register new driver object
-func (m *Manager) Register(name string, driver Cache) *Manager {
-	m.drivers[name] = driver
-	return m
+	m.defName = driverName
 }
 
 // Default returns the default driver instance
 func (m *Manager) Default() Cache {
-	return m.drivers[m.defName]
+	if c, ok := m.drivers[m.defName]; ok {
+		return c
+	}
+
+	panic("cache driver: " + m.defName + " is not registered")
 }
 
 // Use driver object by name and set it as default driver.
@@ -62,7 +83,7 @@ func (m *Manager) Use(driverName string) Cache {
 	return m.Driver(driverName)
 }
 
-// Cache driver object by name. alias of Driver()
+// Cache get driver by name. alias of Driver()
 func (m *Manager) Cache(driverName string) Cache {
 	return m.drivers[driverName]
 }
@@ -83,6 +104,19 @@ func (m *Manager) Close() (err error) {
 		err = cache.Close()
 	}
 	return err
+}
+
+// UnregisterAll cache drivers
+func (m *Manager) UnregisterAll(fn ...func(cache Cache)) {
+	m.defName = ""
+
+	for name, driver := range m.drivers {
+		if len(fn) > 0 {
+			fn[0](driver)
+		}
+
+		delete(m.drivers, name)
+	}
 }
 
 /*************************************************************

@@ -3,13 +3,11 @@ package nutsdb
 
 import (
 	"time"
-
-	"github.com/gookit/cache"
 )
 
-// NutsDB definition
+// NutsDB definition TODO
 type NutsDB struct {
-	cache.BaseDriver
+	// cache.BaseDriver
 }
 
 func (c *NutsDB) Has(key string) bool {

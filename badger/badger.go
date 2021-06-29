@@ -5,12 +5,10 @@ import (
 	"time"
 
 	"github.com/dgraph-io/badger"
-	"github.com/gookit/cache"
 )
 
 // BadgerDB definition
 type BadgerDB struct {
-	cache.BaseDriver
 	db *badger.DB
 }
 

@@ -56,9 +56,19 @@ func (c *Redigo) Connect() *Redigo {
 
 // Get value by key
 func (c *Redigo) Get(key string) interface{} {
-	val, err := redis.Bytes(c.exec("Get", c.Key(key)))
+	bts, err := redis.Bytes(c.exec("Get", c.Key(key)))
 
-	return c.Unmarshal(val, err)
+	return c.Unmarshal(bts, err)
+}
+
+// GetAs get cache and unmarshal to ptr
+func (c *Redigo) GetAs(key string, ptr interface{}) error {
+	bts, err := redis.Bytes(c.exec("Get", c.Key(key)))
+	if err != nil {
+		return err
+	}
+
+	return c.UnmarshalTo(bts, ptr)
 }
 
 // Set value by key

@@ -2,14 +2,12 @@ package redis_test
 
 import (
 	"fmt"
-	"math/rand"
-	"strconv"
 	"testing"
-	"time"
 
 	"github.com/gookit/cache"
 	"github.com/gookit/cache/redis"
 	"github.com/gookit/goutil/dump"
+	"github.com/gookit/goutil/strutil"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -45,8 +43,9 @@ func getC() *redis.Redigo {
 func TestRedigo_basic(t *testing.T) {
 	c := getC()
 
-	key := randomKey()
-	t.Log("cache key", c.Key(key))
+	key := strutil.RandomCharsV2(12)
+	dump.P("cache key: " + c.Key(key))
+
 	assert.False(t, c.Has(key))
 
 	err := c.Set(key, "value", cache.Seconds3)
@@ -72,8 +71,9 @@ func TestRedigo_object(t *testing.T) {
 		Name: "inhere",
 	}
 
-	key := randomKey()
-	t.Log("cache key", c.Key(key))
+	key := strutil.RandomCharsV2(12)
+	dump.P("cache key: " + c.Key(key))
+
 	assert.False(t, c.Has(key))
 
 	err := c.Set(key, b1, cache.Seconds3)
@@ -83,16 +83,16 @@ func TestRedigo_object(t *testing.T) {
 	v := c.Get(key)
 	assert.NotEmpty(t, v)
 
-	// dump.P(v.(string))
 	dump.P(v)
+
+	u2 := user{}
+	err = c.GetAs(key, &u2)
+	assert.NoError(t, err)
+	dump.P(u2)
+	assert.Equal(t, "inhere", u2.Name)
 
 	err = c.Del(key)
 	assert.NoError(t, err)
 	assert.False(t, c.Has(key))
-
 	assert.Empty(t, c.Get(key))
-}
-
-func randomKey() string {
-	return "k" + time.Now().Format("20060102") + strconv.Itoa(rand.Intn(999))
 }

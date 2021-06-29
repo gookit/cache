@@ -83,9 +83,18 @@ var std = NewManager()
 
 // Register driver to manager instance
 func Register(name string, driver Cache) *Manager {
-	std.DefaultUse(name)
 	std.Register(name, driver)
 	return std
+}
+
+// Unregister an cache driver
+func Unregister(name string) {
+	std.Unregister(name)
+}
+
+// UnregisterAll cache drivers
+func UnregisterAll(fn ...func(cache Cache)) {
+	std.UnregisterAll(fn...)
 }
 
 // SetDefName set default driver name.

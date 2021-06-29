@@ -12,6 +12,7 @@ import (
 
 // FileCache definition.
 type FileCache struct {
+	BaseDriver
 	// caches in memory
 	MemoryCache
 	// cache directory path
@@ -81,7 +82,7 @@ func (c *FileCache) get(key string) interface{} {
 	}
 
 	item := &Item{}
-	if err = c.MustUnmarshal(bs, item); err != nil {
+	if err = c.UnmarshalTo(bs, item); err != nil {
 		c.SetLastErr(err)
 		return nil
 	}

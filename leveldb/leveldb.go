@@ -4,13 +4,12 @@ package leveldb
 import (
 	"time"
 
-	"github.com/gookit/cache"
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
 // LevelDB definition
 type LevelDB struct {
-	cache.BaseDriver
+	// cache.BaseDriver
 	db *leveldb.DB
 }
 

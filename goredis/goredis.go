@@ -96,6 +96,16 @@ func (c *GoRedis) Get(key string) interface{} {
 	return c.Unmarshal(bts, err)
 }
 
+// GetAs get cache and unmarshal to ptr
+func (c *GoRedis) GetAs(key string, ptr interface{}) error {
+	bts, err := c.rdb.Get(CtxForExec, c.Key(key)).Bytes()
+	if err != nil {
+		return err
+	}
+
+	return c.UnmarshalTo(bts, ptr)
+}
+
 // Set cache by key
 func (c *GoRedis) Set(key string, val interface{}, ttl time.Duration) (err error) {
 	val, err = c.Marshal(val)

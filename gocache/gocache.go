@@ -1,34 +1,48 @@
+// Package gocache is a memory cache driver implement.
+// base on the package: github.com/patrickmn/go-cache
+//
+// Usage:
+//	import "github.com/gookit/cache"
+//
+//	cache.Register(gocache.NewGoCache(0, cache.FiveMinutes))
+//	// use
+//	// cache.Set("key", "value")
 package gocache
 
 import (
 	"time"
 
-	"github.com/gookit/cache"
 	goc "github.com/patrickmn/go-cache"
 )
 
+// Name driver name
+const Name = "gocache"
+
 // GoCache struct
 type GoCache struct {
-	cache.BaseDriver
-	cache *goc.Cache
-	// expire handle
+	db *goc.Cache
+	// will handle expire on has,get
 	expireManually bool
 }
 
 // New create instance
 func New() *GoCache {
-	c := goc.New(goc.NoExpiration, goc.NoExpiration)
+	return NewSimple()
+}
+
+// NewSimple create new simple instance
+func NewSimple() *GoCache {
 	return &GoCache{
-		cache:          c,
+		db: goc.New(goc.NoExpiration, goc.NoExpiration),
+		// handle expire on has,get
 		expireManually: true,
 	}
 }
 
 // NewGoCache create instance with settings
 func NewGoCache(defaultExpiration, cleanupInterval time.Duration) *GoCache {
-	c := goc.New(defaultExpiration, cleanupInterval)
 	return &GoCache{
-		cache: c,
+		db: goc.New(defaultExpiration, cleanupInterval),
 	}
 }
 
@@ -39,7 +53,7 @@ func (g *GoCache) Close() error {
 
 // Clear all caches
 func (g *GoCache) Clear() error {
-	g.cache.Flush()
+	g.db.Flush()
 	return nil
 }
 
@@ -51,32 +65,56 @@ func (g *GoCache) Has(key string) bool {
 // Get cache by key
 func (g *GoCache) Get(key string) interface{} {
 	if g.expireManually {
-		g.cache.DeleteExpired()
+		g.db.DeleteExpired()
 	}
-	val, _ := g.cache.Get(key)
+
+	val, _ := g.db.Get(key)
 	return val
 }
 
 // Set cache by key
-func (g *GoCache) Set(key string, val interface{}, ttl time.Duration) (err error) {
-	g.cache.Set(key, val, ttl)
+func (g *GoCache) Set(key string, val interface{}, ttl time.Duration) error {
+	g.db.Set(key, val, ttl)
 	return nil
 }
 
 // Del cache by key
 func (g GoCache) Del(key string) error {
-	g.cache.Delete(key)
+	g.db.Delete(key)
 	return nil
 }
 
+// GetMulti cache by keys
 func (g *GoCache) GetMulti(keys []string) map[string]interface{} {
-	panic("implement me")
+	data := make(map[string]interface{}, len(keys))
+
+	for _, key := range keys {
+		val, ok := g.db.Get(key)
+		if ok {
+			data[key] = val
+		}
+	}
+
+	return data
 }
 
-func (g GoCache) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
-	panic("implement me")
+// SetMulti cache by keys
+func (g GoCache) SetMulti(values map[string]interface{}, ttl time.Duration) error {
+	for key, val := range values {
+		g.db.Set(key, val, ttl)
+	}
+	return nil
 }
 
+// DelMulti db by keys
 func (g *GoCache) DelMulti(keys []string) error {
-	panic("implement me")
+	for _, key := range keys {
+		g.db.Delete(key)
+	}
+	return nil
+}
+
+// Db get the goc.Cache
+func (g *GoCache) Db() *goc.Cache {
+	return g.db
 }

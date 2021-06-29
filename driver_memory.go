@@ -7,7 +7,6 @@ import (
 
 // MemoryCache definition.
 type MemoryCache struct {
-	BaseDriver
 	// locker
 	lock sync.RWMutex
 	// cache data in memory. or use sync.Map
@@ -55,8 +54,8 @@ func (c *MemoryCache) Get(key string) interface{} {
 func (c *MemoryCache) get(key string) interface{} {
 	if item, ok := c.caches[key]; ok {
 		// check expire time
+		// if has been expired, remove it.
 		if item.Invalid() {
-			// if has been expired, remove it.
 			_ = c.del(key)
 		}
 
@@ -103,37 +102,37 @@ func (c *MemoryCache) del(key string) error {
 // GetMulti values by multi key
 func (c *MemoryCache) GetMulti(keys []string) map[string]interface{} {
 	c.lock.RLock()
-	defer c.lock.RUnlock()
 
-	values := make(map[string]interface{}, len(keys))
+	data := make(map[string]interface{}, len(keys))
 	for _, key := range keys {
-		values[key] = c.get(key)
+		data[key] = c.get(key)
 	}
 
-	return values
+	c.lock.RUnlock()
+	return data
 }
 
 // SetMulti values by multi key
 func (c *MemoryCache) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
 	c.lock.Lock()
-	defer c.lock.Unlock()
-
 	for key, val := range values {
 		if err = c.set(key, val, ttl); err != nil {
 			return
 		}
 	}
+
+	c.lock.Unlock()
 	return
 }
 
 // DelMulti values by multi key
 func (c *MemoryCache) DelMulti(keys []string) error {
 	c.lock.Lock()
-	defer c.lock.Unlock()
-
 	for _, key := range keys {
 		_ = c.del(key)
 	}
+
+	c.lock.Unlock()
 	return nil
 }
 

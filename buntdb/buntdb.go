@@ -72,7 +72,7 @@ func (c *BuntDB) Get(key string) interface{} {
 			return err
 		}
 
-		return c.MustUnmarshal([]byte(str), &val)
+		return c.UnmarshalTo([]byte(str), &val)
 	})
 
 	if err != nil {
@@ -119,7 +119,7 @@ func (c *BuntDB) GetMulti(keys []string) map[string]interface{} {
 			}
 
 			var val interface{}
-			err = c.MustUnmarshal([]byte(str), &val)
+			err = c.UnmarshalTo([]byte(str), &val)
 			if err != nil {
 				return err
 			}
