@@ -53,6 +53,8 @@ type Cache interface {
 	// basic op
 	Has(key string) bool
 	Get(key string) interface{}
+	// GetAs get cache value and unmarshal to an object ptr.
+	GetAs(key string, ptr interface{}) error
 	Set(key string, val interface{}, ttl time.Duration) (err error)
 	Del(key string) error
 	// multi op
