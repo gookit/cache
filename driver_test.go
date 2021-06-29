@@ -31,13 +31,14 @@ func TestNewMemoryCache(t *testing.T) {
 	is.False(c.Has(key))
 }
 
+type user struct {
+	Age int
+	Name string
+}
+
 func TestMemoryCache_object(t *testing.T) {
 	is := assert.New(t)
 
-	type user struct {
-		Age int
-		Name string
-	}
 	b1 := user {
 		Age: 1,
 		Name: "inhere",
@@ -97,6 +98,30 @@ func TestNewFileCache(t *testing.T) {
 	err = c.Del(key)
 	is.NoError(err)
 	is.False(c.Has(key))
+}
+
+func TestFileCache_object(t *testing.T) {
+	is := assert.New(t)
+	c := cache.NewFileCache("./testdata")
+	c.WithOptions(cache.WithEncode(true))
+
+	b1 := user {
+		Age: 12,
+		Name: "inhere",
+	}
+
+	key := randomKey()
+	dump.P("cache key:", c.Key(key))
+
+	err := c.Set(key, b1, cache.Seconds3)
+	is.NoError(err)
+	is.True(c.Has(key))
+
+	val := c.Get(key)
+	dump.P("cache get:", val)
+
+	// val2 := c.GetAs()
+	// dump.P("cache get:", val)
 }
 
 func randomKey() string {

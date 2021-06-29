@@ -16,8 +16,10 @@ type FileCache struct {
 	MemoryCache
 	// cache directory path
 	cacheDir string
-	// cache file prefix
-	// prefix string
+	// DisableMemCache disable cache in memory
+	DisableMemCache bool
+	// FilePrefix cache file prefix
+	// FilePrefix string
 	// security key for generate cache file name.
 	securityKey string
 }
@@ -233,8 +235,7 @@ func (c *FileCache) GetFilename(key string) string {
 	return strings.Join([]string{
 		c.cacheDir,
 		str[0:6],
-		c.opt.Prefix+str,
-		".data",
+		c.opt.Prefix+str + ".data",
 	}, "/")
 }
 
