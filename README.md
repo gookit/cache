@@ -46,14 +46,15 @@ go get github.com/gookit/cache
 
 ## Cache Interface
 
-All cache driver implemented the cache.Cache interface. So, You can add any custom driver.
+All cache driver implemented the `cache.Cache` interface. So, You can add any custom driver.
 
 ```go
-// Cache interface definition
 type Cache interface {
 	// basic operation
 	Has(key string) bool
 	Get(key string) interface{}
+    // GetAs get cache value and unmarshal as ptr.
+    GetAs(key string, ptr interface{}) error
 	Set(key string, val interface{}, ttl time.Duration) (err error)
 	Del(key string) error
 	// multi operation

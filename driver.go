@@ -83,7 +83,7 @@ func (l *BaseDriver) MustMarshal(val interface{}) ([]byte, error) {
 
 // Marshal cache value
 func (l *BaseDriver) Marshal(val interface{}) (interface{}, error) {
-	if Marshal != nil {
+	if l.opt.Encode && Marshal != nil {
 		return Marshal(val)
 	}
 
@@ -106,7 +106,7 @@ func (l *BaseDriver) Unmarshal(val []byte, err error) interface{} {
 	}
 
 	var newV interface{}
-	if Unmarshal != nil {
+	if l.opt.Encode && Unmarshal != nil {
 		err := Unmarshal(val, &newV)
 		l.SetLastErr(err)
 		return newV
@@ -115,23 +115,36 @@ func (l *BaseDriver) Unmarshal(val []byte, err error) interface{} {
 	return val
 }
 
-// GetAs get cache value and unmarshal as ptr.
+// GetAs get cache value and decode value to object ptr
 func (l *BaseDriver) GetAs(key string, ptr interface{}) error {
 	// TODO bts, err := c.Get(key)
 	// if Unmarshal != nil {
 	// 	err := Unmarshal(bts, ptr)
 	// 	return err
 	// }
-
-	return errNoUnmarshal
+	panic("please implement me")
 }
 
-// Key cache key build
+// Key real cache key build
 func (l *BaseDriver) Key(key string) string {
 	if l.opt.Prefix != "" {
 		return l.opt.Prefix + key
 	}
 	return key
+}
+
+// BuildKeys real cache keys build
+func (l *BaseDriver) BuildKeys(keys []string) []string {
+	if l.opt.Prefix == "" {
+		return keys
+	}
+
+	rks := make([]string,0, len(keys))
+
+	for _, key := range keys {
+		rks = append(rks, l.opt.Prefix + key)
+	}
+	return rks
 }
 
 // Debugf print an debug message

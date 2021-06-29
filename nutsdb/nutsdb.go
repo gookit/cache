@@ -1,10 +1,15 @@
 // Package nutsdb use the https://github.com/xujiajun/nutsdb as cache driver
 package nutsdb
 
-import "time"
+import (
+	"time"
+
+	"github.com/gookit/cache"
+)
 
 // NutsDB definition
 type NutsDB struct {
+	cache.BaseDriver
 }
 
 func (c *NutsDB) Has(key string) bool {

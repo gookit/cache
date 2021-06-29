@@ -10,8 +10,9 @@ import (
 
 // MemCached definition
 type MemCached struct {
-	servers []string
+	cache.BaseDriver
 	client  *memcache.Client
+	servers []string
 }
 
 // New a MemCached instance
@@ -38,58 +39,58 @@ func (c *MemCached) Connect() *MemCached {
 
 // Has cache key
 func (c *MemCached) Has(key string) bool {
-	_, err := c.client.Get(key)
+	_, err := c.client.Get(c.Key(key))
 	return err == nil
 }
 
 // Get value by key
 func (c *MemCached) Get(key string) (val interface{}) {
-	item, err := c.client.Get(key)
+	item, err := c.client.Get(c.Key(key))
 	if err != nil {
 		return
 	}
 
-	err = cache.GobDecode(item.Value, val)
+	err = c.MustUnmarshal(item.Value, &val)
 	if err != nil {
 		return nil
 	}
-
 	return
 }
 
 // Set value by key
 func (c *MemCached) Set(key string, val interface{}, ttl time.Duration) (err error) {
-	bts, err := cache.GobEncode(val)
+	bts, err := c.MustMarshal(val)
 	if err != nil {
 		return err
 	}
 
 	return c.client.Set(&memcache.Item{
-		Key:   key,
+		Key:   c.Key(key),
 		Value: bts,
-		// expire time. 0 is never
+		// expire time. 0 is never expired
 		Expiration: int32(ttl / time.Second),
 	})
 }
 
 // Del value by key
 func (c *MemCached) Del(key string) error {
-	return c.client.Delete(key)
+	return c.client.Delete(c.Key(key))
 }
 
 // GetMulti values by multi key
 func (c *MemCached) GetMulti(keys []string) map[string]interface{} {
+	keys = c.BuildKeys(keys)
+
 	items, err := c.client.GetMulti(keys)
 	if err != nil {
 		return nil
 	}
 
 	values := make(map[string]interface{}, len(keys))
-
 	for key, item := range items {
 		var val interface{}
-		if err := cache.GobDecode(item.Value, val); err != nil {
-			return nil
+		if err := c.MustUnmarshal(item.Value, &val); err != nil {
+			continue
 		}
 
 		values[key] = val
@@ -101,7 +102,7 @@ func (c *MemCached) GetMulti(keys []string) map[string]interface{} {
 // SetMulti values by multi key
 func (c *MemCached) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
 	for key, val := range values {
-		if err = c.Set(key, val, ttl); err != nil {
+		if err = c.Set(c.Key(key), val, ttl); err != nil {
 			return
 		}
 	}
@@ -111,7 +112,7 @@ func (c *MemCached) SetMulti(values map[string]interface{}, ttl time.Duration) (
 
 // DelMulti values by multi key
 func (c *MemCached) DelMulti(keys []string) error {
-	for _, key := range keys {
+	for _, key := range c.BuildKeys(keys) {
 		if err := c.client.Delete(key); err != nil {
 			return err
 		}
@@ -126,7 +127,8 @@ func (c *MemCached) Clear() error {
 }
 
 // Close driver
-func (*MemCached) Close() error {
+func (c *MemCached) Close() error {
+	c.client = nil
 	return nil
 }
 

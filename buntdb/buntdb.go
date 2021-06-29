@@ -14,6 +14,7 @@ const Name = "buntDB"
 
 // BuntDB definition.
 type BuntDB struct {
+	cache.BaseDriver
 	// db file path. eg "path/to/my.db"
 	file string
 	// db instance
@@ -71,7 +72,7 @@ func (c *BuntDB) Get(key string) interface{} {
 			return err
 		}
 
-		return cache.GobDecode([]byte(str), val)
+		return c.MustUnmarshal([]byte(str), &val)
 	})
 
 	if err != nil {
@@ -82,7 +83,7 @@ func (c *BuntDB) Get(key string) interface{} {
 
 // Set value by key
 func (c *BuntDB) Set(key string, val interface{}, ttl time.Duration) (err error) {
-	bts, err := cache.GobEncode(val)
+	bts, err := c.MustMarshal(val)
 	if err != nil {
 		return err
 	}
@@ -118,7 +119,7 @@ func (c *BuntDB) GetMulti(keys []string) map[string]interface{} {
 			}
 
 			var val interface{}
-			err = cache.GobDecode([]byte(str), val)
+			err = c.MustUnmarshal([]byte(str), &val)
 			if err != nil {
 				return err
 			}
@@ -145,7 +146,7 @@ func (c *BuntDB) SetMulti(values map[string]interface{}, ttl time.Duration) (err
 		}
 
 		for key, val := range values {
-			bts, err := cache.GobEncode(val)
+			bts, err := c.MustMarshal(val)
 			if err != nil {
 				return err
 			}

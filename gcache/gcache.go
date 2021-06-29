@@ -1,10 +1,14 @@
 // Package gcache use the github.com/bluele/gcache as cache driver
 package gcache
 
-import "github.com/bluele/gcache"
+import (
+	"github.com/bluele/gcache"
+	"github.com/gookit/cache"
+)
 
 // GCache driver definition
 type GCache struct {
+	cache.BaseDriver
 	db gcache.Cache
 }
 

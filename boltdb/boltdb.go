@@ -2,10 +2,9 @@
 package boltdb
 
 import (
-	"bytes"
-	"encoding/gob"
 	"time"
 
+	"github.com/gookit/cache"
 	"go.etcd.io/bbolt"
 )
 
@@ -13,6 +12,7 @@ const Name = "boltDB"
 
 // BoltDB definition
 type BoltDB struct {
+	cache.BaseDriver
 	// db file path. eg "path/to/my.db"
 	file string
 	// db instance
@@ -33,7 +33,7 @@ func New(file string) *BoltDB {
 
 // Has value check by key
 func (c *BoltDB) Has(key string) bool {
-	panic("implement me")
+	return c.Get(key) != nil
 }
 
 // Get value by key
@@ -43,9 +43,7 @@ func (c *BoltDB) Get(key string) interface{} {
 		b := tx.Bucket([]byte(c.Bucket))
 		bs := b.Get([]byte(key))
 
-		buf := bytes.NewBuffer(bs)
-		dec := gob.NewDecoder(buf)
-		if err := dec.Decode(val); err != nil {
+		if err := c.MustUnmarshal(bs, &val); err != nil {
 			return err
 		}
 
@@ -61,15 +59,14 @@ func (c *BoltDB) Get(key string) interface{} {
 
 // Set value by key
 func (c *BoltDB) Set(key string, val interface{}, _ time.Duration) (err error) {
-	buf := new(bytes.Buffer)
-	enc := gob.NewEncoder(buf)
-	if err = enc.Encode(val); err != nil {
+	bts, err := c.MustMarshal(val)
+	if err != nil {
 		return
 	}
 
 	return c.db.Update(func(tx *bbolt.Tx) error {
 		b := tx.Bucket([]byte(c.Bucket))
-		err := b.Put([]byte(key), buf.Bytes())
+		err := b.Put([]byte(key), bts)
 		return err
 	})
 }
@@ -101,5 +98,11 @@ func (c *BoltDB) Clear() error {
 
 // Close db
 func (c *BoltDB) Close() error {
+	err := c.db.Sync()
+	if err != nil {
+		return err
+	}
+
+	// do close
 	return c.db.Close()
 }

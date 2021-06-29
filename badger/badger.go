@@ -1,14 +1,16 @@
-// Package leveldb use the https://github.com/dgraph-io/badger as cache driver
+// Package badger use the https://github.com/dgraph-io/badger as cache driver
 package badger
 
 import (
 	"time"
 
 	"github.com/dgraph-io/badger"
+	"github.com/gookit/cache"
 )
 
 // BadgerDB definition
 type BadgerDB struct {
+	cache.BaseDriver
 	db *badger.DB
 }
 
