@@ -7,6 +7,9 @@ import (
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
+// Name driver name
+const Name = "leveldb"
+
 // LevelDB definition
 type LevelDB struct {
 	// cache.BaseDriver

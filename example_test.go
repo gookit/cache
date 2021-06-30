@@ -17,7 +17,7 @@ func Example() {
 	cache.Register(goredis.Name, goredis.Connect("127.0.0.1:6379", "", 0))
 
 	// setting default driver name
-	cache.DefaultUse(cache.DvrRedis)
+	cache.DefaultUse(goredis.Name)
 
 	// quick use.(it is default driver)
 	//

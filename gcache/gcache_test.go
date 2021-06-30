@@ -1,4 +1,4 @@
-package gocache_test
+package gcache_test
 
 import (
 	"fmt"
@@ -6,14 +6,14 @@ import (
 	"time"
 
 	"github.com/gookit/cache"
-	"github.com/gookit/cache/gocache"
+	"github.com/gookit/cache/gcache"
 	"github.com/gookit/goutil/dump"
 	"github.com/gookit/goutil/strutil"
 	"github.com/stretchr/testify/assert"
 )
 
 func Example() {
-	c := gocache.New()
+	c := gcache.New(12)
 	key := "name"
 
 	// set
@@ -41,9 +41,8 @@ func Example() {
 	// false
 }
 
-func ExampleGoCache_in_cachePkg() {
-	c1 := gocache.NewGoCache(cache.OneDay, cache.FiveMinutes)
-	cache.Register(gocache.Name, c1)
+func ExampleGCache_in_cachePkg() {
+	cache.Register(gcache.Name, gcache.New(12))
 	defer cache.UnregisterAll()
 
 	key := "name1"
@@ -73,9 +72,9 @@ func ExampleGoCache_in_cachePkg() {
 	// false
 }
 
-func TestGoCache_usage(t *testing.T) {
+func TestGCache_usage(t *testing.T) {
 	is := assert.New(t)
-	c := gocache.NewSimple()
+	c := gcache.New(12)
 	defer c.Clear()
 
 	key := strutil.RandomCharsV2(12)
@@ -99,9 +98,9 @@ type user struct {
 	Name string
 }
 
-func TestGoCache_object(t *testing.T) {
+func TestGCache_object(t *testing.T) {
 	is := assert.New(t)
-	c := gocache.NewSimple()
+	c := gcache.New(12)
 	defer c.Clear()
 
 	b1 := user {

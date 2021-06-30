@@ -7,6 +7,9 @@ import (
 	"github.com/bluele/gcache"
 )
 
+// Name driver name
+const Name = "gcache"
+
 // GCache driver definition
 type GCache struct {
 	// cache.BaseDriver

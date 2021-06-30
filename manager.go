@@ -43,13 +43,18 @@ func (m *Manager) Register(name string, driver Cache) *Manager {
 }
 
 // Unregister an cache driver
-func (m *Manager) Unregister(name string) {
+func (m *Manager) Unregister(name string) int {
+	if _, ok := m.drivers[name]; !ok {
+		return 0
+	}
+
 	delete(m.drivers, name)
 
 	// reset default driver name.
 	if m.defName == name {
 		m.defName = ""
 	}
+	return 1
 }
 
 // SetDefName set default driver name. alias of DefaultUse()
@@ -106,10 +111,20 @@ func (m *Manager) Close() (err error) {
 	return err
 }
 
-// UnregisterAll cache drivers
-func (m *Manager) UnregisterAll(fn ...func(cache Cache)) {
-	m.defName = ""
+// ClearAll all drivers caches
+func (m *Manager) ClearAll() (err error) {
+	for _, cache := range m.drivers {
+		err = cache.Clear()
+	}
+	return err
+}
 
+// UnregisterAll cache drivers
+func (m *Manager) UnregisterAll(fn ...func(cache Cache)) int {
+	num := len(m.drivers)
+
+	// unregister
+	m.defName = ""
 	for name, driver := range m.drivers {
 		if len(fn) > 0 {
 			fn[0](driver)
@@ -117,6 +132,7 @@ func (m *Manager) UnregisterAll(fn ...func(cache Cache)) {
 
 		delete(m.drivers, name)
 	}
+	return num
 }
 
 /*************************************************************

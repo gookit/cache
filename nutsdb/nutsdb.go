@@ -5,6 +5,9 @@ import (
 	"time"
 )
 
+// Name driver name
+const Name = "nutsdb"
+
 // NutsDB definition TODO
 type NutsDB struct {
 	// cache.BaseDriver

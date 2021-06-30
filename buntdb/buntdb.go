@@ -10,6 +10,7 @@ import (
 
 // Memory open a file that does not persist to disk.
 const Memory = ":memory:"
+// Name driver name
 const Name = "buntDB"
 
 // BuntDB definition.

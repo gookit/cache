@@ -25,10 +25,13 @@ Generic cache use and cache manager for golang. Provide a unified usage API by p
 - `gocache` https://github.com/patrickmn/go-cache
 - `bigcache` https://github.com/allegro/bigcache
 
-internal:
+Internal:
 
 - file internal driver [driver_file.go](driver_file.go)
 - memory internal driver [driver_memory.go](driver_memory.go)
+
+> Notice: The built-in implementation is relatively simple and is not recommended for production environments;
+> the production environment recommends using the third-party drivers listed above.
 
 ## GoDoc
 
@@ -53,8 +56,6 @@ type Cache interface {
 	// basic operation
 	Has(key string) bool
 	Get(key string) interface{}
-    // GetAs get cache value and unmarshal to an object ptr.
-    GetAs(key string, ptr interface{}) error
 	Set(key string, val interface{}, ttl time.Duration) (err error)
 	Del(key string) error
 	// multi operation

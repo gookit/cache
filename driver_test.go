@@ -122,3 +122,33 @@ func TestFileCache_object(t *testing.T) {
 	// val2 := c.GetAs()
 	// dump.P("cache get:", val)
 }
+
+func TestDefManager(t *testing.T) {
+	is := assert.New(t)
+	num := cache.UnregisterAll()
+	is.Equal(0, num)
+	is.Equal(0, cache.Unregister("not_exist"))
+
+	cache.Register(cache.DvrMemory, cache.NewMemoryCache())
+	is.Equal(cache.DvrMemory, cache.Std().DefName())
+
+	key := "name"
+
+	// set
+	err := cache.Set(key, "cache value", cache.TwoMinutes)
+	is.NoError(err)
+	is.True(cache.Has(key))
+
+	// get
+	val := cache.Get(key)
+	is.Equal("cache value", val)
+
+	// del
+	is.NoError(cache.Del(key))
+	is.False(cache.Has(key))
+
+	is.NoError(cache.Clear())
+
+	num = cache.UnregisterAll()
+	is.GreaterOrEqual(1, num)
+}

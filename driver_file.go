@@ -49,15 +49,9 @@ func NewFileCache(dir string, pfxAndKey ...string) *FileCache {
 	return c
 }
 
-// Has cache key.
-// TODO decode value, and check expire time
+// Has cache key. will check expire time
 func (c *FileCache) Has(key string) bool {
-	if c.MemoryCache.Has(key) {
-		return true
-	}
-
-	path := c.GetFilename(key)
-	return fileExists(path)
+	return c.get(key) != nil
 }
 
 // Get value by key
@@ -87,15 +81,14 @@ func (c *FileCache) get(key string) interface{} {
 		return nil
 	}
 
-	// check expire time
-	if item.Exp == 0 || item.Exp > time.Now().Unix() {
-		c.caches[key] = item // save to memory.
-		return item.Val
+	// check expired
+	if item.Expired() {
+		c.SetLastErr(c.del(key))
+		return nil
 	}
 
-	// has been expired. delete it.
-	c.SetLastErr(c.del(key))
-	return nil
+	c.caches[key] = item // save to memory.
+	return item.Val
 }
 
 // Set value by key
@@ -107,8 +100,8 @@ func (c *FileCache) Set(key string, val interface{}, ttl time.Duration) (err err
 }
 
 func (c *FileCache) set(key string, val interface{}, ttl time.Duration) (err error) {
-	if err = c.MemoryCache.set(key, val, ttl); err != nil {
-		c.SetLastErr(err)
+	err = c.MemoryCache.set(key, val, ttl)
+	if err != nil {
 		return
 	}
 
@@ -132,10 +125,7 @@ func (c *FileCache) set(key string, val interface{}, ttl time.Duration) (err err
 	}
 	defer f.Close()
 
-	if _, err = f.Write(bs); err != nil {
-		return err
-	}
-
+	_, err = f.Write(bs)
 	return
 }
 
@@ -165,12 +155,12 @@ func (c *FileCache) GetMulti(keys []string) map[string]interface{} {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
 
-	values := make(map[string]interface{}, len(keys))
+	data := make(map[string]interface{}, len(keys))
 	for _, key := range keys {
-		values[key] = c.get(key)
+		data[key] = c.get(key)
 	}
 
-	return values
+	return data
 }
 
 // SetMulti values by multi key

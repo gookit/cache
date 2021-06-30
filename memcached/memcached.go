@@ -8,6 +8,9 @@ import (
 	"github.com/gookit/cache"
 )
 
+// Name driver name
+const Name = "memCached"
+
 // MemCached definition
 type MemCached struct {
 	cache.BaseDriver

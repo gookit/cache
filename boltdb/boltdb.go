@@ -8,6 +8,7 @@ import (
 	"go.etcd.io/bbolt"
 )
 
+// Name driver name
 const Name = "boltDB"
 
 // BoltDB definition

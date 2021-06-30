@@ -5,16 +5,6 @@ import (
 	"time"
 )
 
-// MemoryCache definition.
-type MemoryCache struct {
-	// locker
-	lock sync.RWMutex
-	// cache data in memory. or use sync.Map
-	caches map[string]*Item
-	// TODO set max cache number
-	MaxCacheNum int
-}
-
 // Item for memory cache
 type Item struct {
 	// Exp expire time
@@ -23,9 +13,19 @@ type Item struct {
 	Val interface{}
 }
 
-// Invalid check whether expired
-func (item Item) Invalid() bool {
-	return item.Exp != 0 && item.Exp < time.Now().Unix()
+// Expired check whether expired
+func (item Item) Expired() bool {
+	return item.Exp > 1 && item.Exp < time.Now().Unix()
+}
+
+// MemoryCache definition.
+type MemoryCache struct {
+	// locker
+	lock sync.RWMutex
+	// cache data in memory. or use sync.Map
+	caches map[string]*Item
+	// CacheSize TODO set max cache size
+	CacheSize int
 }
 
 // NewMemoryCache create a memory cache instance
@@ -53,9 +53,8 @@ func (c *MemoryCache) Get(key string) interface{} {
 
 func (c *MemoryCache) get(key string) interface{} {
 	if item, ok := c.caches[key]; ok {
-		// check expire time
-		// if has been expired, remove it.
-		if item.Invalid() {
+		// check expire time. if has been expired, remove it.
+		if item.Expired() {
 			_ = c.del(key)
 		}
 

@@ -88,13 +88,13 @@ func Register(name string, driver Cache) *Manager {
 }
 
 // Unregister an cache driver
-func Unregister(name string) {
-	std.Unregister(name)
+func Unregister(name string) int {
+	return std.Unregister(name)
 }
 
 // UnregisterAll cache drivers
-func UnregisterAll(fn ...func(cache Cache)) {
-	std.UnregisterAll(fn...)
+func UnregisterAll(fn ...func(cache Cache)) int {
+	return std.UnregisterAll(fn...)
 }
 
 // SetDefName set default driver name.
@@ -124,6 +124,11 @@ func Driver(driverName string) Cache {
 	return std.Driver(driverName)
 }
 
+// Std get default cache manager instance
+func Std() *Manager {
+	return std
+}
+
 // DefManager get default cache manager instance
 func DefManager() *Manager {
 	return std
@@ -137,6 +142,11 @@ func Default() Cache {
 // Close all drivers
 func Close() error {
 	return std.Close()
+}
+
+// ClearAll all drivers caches
+func ClearAll() error {
+	return std.ClearAll()
 }
 
 /*************************************************************

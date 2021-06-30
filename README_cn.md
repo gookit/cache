@@ -26,10 +26,12 @@ Golang 通用的缓存管理使用库。
 - `gocache` https://github.com/patrickmn/go-cache
 - `bigcache` https://github.com/allegro/bigcache
 
-internal:
+Internal:
 
 - file 简单的文件缓存(_当前包的内置实现_)
 - memory 简单的内存缓存(_当前包的内置实现_)
+
+> 注意：内置实现比较简单，不推荐生产环境使用；生产环境推荐使用上面列出的三方驱动。
 
 ## GoDoc
 
@@ -53,8 +55,6 @@ type Cache interface {
 	// basic op
 	Has(key string) bool
 	Get(key string) interface{}
-	// GetAs get cache value and unmarshal to an object ptr.
-	GetAs(key string, ptr interface{}) error
 	Set(key string, val interface{}, ttl time.Duration) (err error)
 	Del(key string) error
 	// multi op

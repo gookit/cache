@@ -11,6 +11,7 @@ import (
 	"github.com/gookit/cache"
 )
 
+// Name driver name
 const Name = "redigo"
 
 // RedisCache fallback alias
