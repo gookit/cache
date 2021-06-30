@@ -56,6 +56,7 @@ func (c *MemoryCache) get(key string) interface{} {
 		// check expire time. if has been expired, remove it.
 		if item.Expired() {
 			_ = c.del(key)
+			return nil
 		}
 
 		return item.Val
