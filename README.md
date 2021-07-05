@@ -7,11 +7,13 @@
 
 > **[中文说明](README_cn.md)**
 
-Generic cache use and cache manager for golang. Provide a unified usage API by packaging various commonly used drivers.
+Generic cache use and cache manager for golang. 
+
+Provide a unified usage API by packaging various commonly used drivers.
 
 > All cache driver implemented the `cache.Cache` interface. So, You can add any custom driver.
 
-**Supported Drivers:**
+**Packaged Drivers:**
 
 - `goredis` https://github.com/go-redis/redis
 - `redis` https://github.com/gomodule/redigo
@@ -129,6 +131,21 @@ cache.Set("name", "cache value", cache.TwoMinutes)
 // get: "cache value"
 val := cache.Get("name")
 ```
+
+## Gookit packages
+
+- [gookit/ini](https://github.com/gookit/ini) Go config management, use INI files
+- [gookit/rux](https://github.com/gookit/rux) Simple and fast request router for golang HTTP
+- [gookit/gcli](https://github.com/gookit/gcli) build CLI application, tool library, running CLI commands
+- [gookit/slog](https://github.com/gookit/slog) Lightweight, extensible, configurable logging library written in Go
+- [gookit/event](https://github.com/gookit/event) Lightweight event manager and dispatcher implements by Go
+- [gookit/cache](https://github.com/gookit/cache) Provide a unified usage API by packaging various commonly used drivers.
+- [gookit/config](https://github.com/gookit/config) Go config management. support JSON, YAML, TOML, INI, HCL, ENV and Flags
+- [gookit/color](https://github.com/gookit/color) A command-line color library with true color support, universal API methods and Windows support
+- [gookit/filter](https://github.com/gookit/filter) Provide filtering, sanitizing, and conversion of golang data
+- [gookit/validate](https://github.com/gookit/validate) Use for data validation and filtering. support Map, Struct, Form data
+- [gookit/goutil](https://github.com/gookit/goutil) Some utils for the Go: string, array/slice, map, format, cli, env, filesystem, test and more
+- More, please see https://github.com/gookit
 
 ## License
 

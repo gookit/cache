@@ -8,11 +8,12 @@
 > **[EN README](README.md)**
 
 Golang 通用的缓存管理使用库。
+
 通过包装各种常用的驱动，屏蔽掉底层各个驱动的不同使用方法，来提供统一的使用API。
 
 > 所有缓存驱动程序都实现了 `cache.Cache` 接口。 因此，您可以添加任何自定义驱动程序。
 
-**支持的驱动:**
+**已经封装的驱动:**
 
 - `goredis` https://github.com/go-redis/redis
 - `redis` https://github.com/gomodule/redigo
@@ -26,7 +27,7 @@ Golang 通用的缓存管理使用库。
 - `gocache` https://github.com/patrickmn/go-cache
 - `bigcache` https://github.com/allegro/bigcache
 
-Internal:
+**内置实现:**
 
 - file 简单的文件缓存(_当前包的内置实现_)
 - memory 简单的内存缓存(_当前包的内置实现_)
@@ -61,8 +62,9 @@ type Cache interface {
 	GetMulti(keys []string) map[string]interface{}
 	SetMulti(values map[string]interface{}, ttl time.Duration) (err error)
 	DelMulti(keys []string) error
-	// clear
+	// clear & close
 	Clear() error
+	Close() error
 }
 ```
 
@@ -129,6 +131,21 @@ cache.Set("name", "cache value", cache.TwoMinutes)
 // get: "cache value"
 val := cache.Get("name")
 ```
+
+## Gookit packages
+
+- [gookit/rux](https://github.com/gookit/rux) Simple and fast request router for golang HTTP
+- [gookit/gcli](https://github.com/gookit/gcli) build CLI application, tool library, running CLI commands
+- [gookit/slog](https://github.com/gookit/slog) Lightweight, extensible, configurable logging library written in Go
+- [gookit/event](https://github.com/gookit/event) Lightweight event manager and dispatcher implements by Go
+- [gookit/cache](https://github.com/gookit/cache) Provide a unified usage API by packaging various commonly used drivers.
+- [gookit/config](https://github.com/gookit/config) Go config management. support JSON, YAML, TOML, INI, HCL, ENV and Flags
+- [gookit/color](https://github.com/gookit/color) A command-line color library with true color support, universal API methods and Windows support
+- [gookit/filter](https://github.com/gookit/filter) Provide filtering, sanitizing, and conversion of golang data
+- [gookit/validate](https://github.com/gookit/validate) Use for data validation and filtering. support Map, Struct, Form data
+- [gookit/ini](https://github.com/gookit/ini) INI parse, simple go config management, use INI files
+- [gookit/goutil](https://github.com/gookit/goutil) Some utils for the Go: string, array/slice, map, format, cli, env, filesystem, test and more
+- More, please see https://github.com/gookit
 
 ## License
 
