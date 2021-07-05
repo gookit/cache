@@ -8,10 +8,10 @@ import (
 	"github.com/tidwall/buntdb"
 )
 
-// Memory open a file that does not persist to disk.
-const Memory = ":memory:"
 // Name driver name
 const Name = "buntDB"
+// Memory open a file that does not persist to disk.
+const Memory = ":memory:"
 
 // BuntDB definition.
 type BuntDB struct {

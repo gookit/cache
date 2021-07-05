@@ -7,6 +7,9 @@ import (
 	"github.com/dgraph-io/badger"
 )
 
+// Name driver name
+const Name = "badger"
+
 // BadgerDB definition
 type BadgerDB struct {
 	db *badger.DB

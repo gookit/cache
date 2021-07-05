@@ -63,17 +63,32 @@ func (g GCache) Del(key string) error {
 
 // GetMulti cache by keys
 func (g *GCache) GetMulti(keys []string) map[string]interface{} {
-	panic("implement me")
+	data := make(map[string]interface{}, len(keys))
+
+	for _, key := range keys {
+		val, err := g.db.Get(key)
+		if err == nil {
+			data[key] = val
+		} // TODO log error
+	}
+
+	return data
 }
 
 // SetMulti cache by keys
 func (g GCache) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
-	panic("implement me")
+	for key, val := range values {
+		err = g.db.SetWithExpire(key, val, ttl)
+	}
+	return
 }
 
 // DelMulti cache by keys
 func (g *GCache) DelMulti(keys []string) error {
-	panic("implement me")
+	for _, key := range keys {
+		g.db.Remove(key)
+	}
+	return nil
 }
 
 // Db get the gcache.Cache
