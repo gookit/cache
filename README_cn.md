@@ -75,6 +75,8 @@ import (
 	"fmt"
 	
 	"github.com/gookit/cache"
+	"github.com/gookit/cache/gcache"
+	"github.com/gookit/cache/gocache"
 	"github.com/gookit/cache/goredis"
 	"github.com/gookit/cache/redis"
 )
@@ -82,7 +84,9 @@ import (
 func main() {
 	// 注册一个（或多个）缓存驱动
 	cache.Register(cache.DvrFile, cache.NewFileCache(""))
-	cache.Register(cache.DvrMemory, cache.NewMemoryCache())
+	// cache.Register(cache.DvrMemory, cache.NewMemoryCache())
+	cache.Register(gcache.Name, gcache.New(1000))
+	cache.Register(gocache.Name, gocache.NewGoCache(cache.OneDay, cache.FiveMinutes))
 	cache.Register(redis.Name, redis.Connect("127.0.0.1:6379", "", 0))
 	cache.Register(goredis.Name, goredis.Connect("127.0.0.1:6379", "", 0))
 
@@ -102,8 +106,8 @@ func main() {
 	fmt.Print(val)
 	
 	// 使用已注册的其他驱动
-	client := cache.Driver(cache.DvrFile)
-	client.Set("key", "val", 0)
+	client := cache.Driver(gcache.Name)
+	client.Set("key", "val", cache.Seconds3)
 	val = client.Get("key")
 	// Out: "val"
 	fmt.Print(val)

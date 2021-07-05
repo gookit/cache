@@ -77,6 +77,8 @@ import (
 	"fmt"
 
 	"github.com/gookit/cache"
+	"github.com/gookit/cache/gcache"
+	"github.com/gookit/cache/gocache"
 	"github.com/gookit/cache/goredis"
 	"github.com/gookit/cache/redis"
 )
@@ -84,12 +86,14 @@ import (
 func main() {
 	// register one(or some) cache driver
 	cache.Register(cache.DvrFile, cache.NewFileCache(""))
-	cache.Register(cache.DvrMemory, cache.NewMemoryCache())
+	// cache.Register(cache.DvrMemory, cache.NewMemoryCache())
+	cache.Register(gcache.Name, gcache.New(1000))
+	cache.Register(gocache.Name, gocache.NewGoCache(cache.OneDay, cache.FiveMinutes))
 	cache.Register(redis.Name, redis.Connect("127.0.0.1:6379", "", 0))
 	cache.Register(goredis.Name, goredis.Connect("127.0.0.1:6379", "", 0))
 
 	// setting default driver name
-	cache.DefaultUse(redis.Name)
+	cache.DefaultUse(gocache.Name)
 
 	// quick use.(it is default driver)
 	//
@@ -104,7 +108,7 @@ func main() {
 	fmt.Print(val)
 
 	// More ...
-	// fc := cache.Driver(DvrFile)
+	// fc := cache.Driver(gcache.Name)
 	// fc.Set("key", "value", 10)
 	// fc.Get("key")
 }
