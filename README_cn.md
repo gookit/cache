@@ -48,7 +48,7 @@ go get github.com/gookit/cache
 
 ## 接口方法
 
-所有缓存驱动程序都实现了cache.Cache接口。 因此，您可以添加任何自定义驱动程序。
+所有缓存驱动程序都实现了 `cache.Cache` 接口。 因此，您可以添加任何自定义驱动程序。
 
 ```go
 // Cache interface definition
@@ -93,7 +93,7 @@ func main() {
 	cache.Register(goredis.Name, goredis.Connect("127.0.0.1:6379", "", 0))
 
 	// 设置默认驱动名称
-	cache.DefaultUse(cache.DvrRedis)
+	cache.DefaultUse(goredis.Name)
 
 	// 快速使用（默认驱动）
 	//
