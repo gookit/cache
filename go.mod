@@ -8,7 +8,7 @@ require (
 	github.com/dgraph-io/badger v1.6.2
 	github.com/dgraph-io/ristretto v0.0.3 // indirect
 	github.com/dgryski/go-farm v0.0.0-20200201041132-a6ae2369ad13 // indirect
-	github.com/go-redis/redis/v8 v8.11.2
+	github.com/go-redis/redis/v8 v8.11.3
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/gookit/goutil v0.3.15
@@ -19,5 +19,4 @@ require (
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/tidwall/buntdb v1.2.6
 	go.etcd.io/bbolt v1.3.6
-	google.golang.org/protobuf v1.25.0 // indirect
 )
