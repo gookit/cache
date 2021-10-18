@@ -11,7 +11,7 @@ require (
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/gomodule/redigo v2.0.0+incompatible
-	github.com/gookit/goutil v0.3.15
+	github.com/gookit/goutil v0.4.0
 	github.com/gookit/gsr v0.0.4
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1 // indirect
