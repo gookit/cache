@@ -62,8 +62,8 @@ github.com/google/go-cmp v0.5.6/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/gookit/color v1.5.0 h1:1Opow3+BWDwqor78DcJkJCIwnkviFi+rrOANki9BUFw=
 github.com/gookit/color v1.5.0/go.mod h1:43aQb+Zerm/BWh2GnrgOQm7ffz7tvQXEKV6BFMl7wAo=
-github.com/gookit/goutil v0.4.2 h1:pQ5owW9EBwKhg8wIY6fvGouIAmV4H2YGYxVmQH+mukw=
-github.com/gookit/goutil v0.4.2/go.mod h1:qlGVh0PI+WnWSjYnIocfz/7tkeogxL6+EDNP1mRe+7o=
+github.com/gookit/goutil v0.4.3 h1:qr7PRWRYL1VGZSiNwgQcyYHGk8W2gNg2Vt/yT8zNE+Q=
+github.com/gookit/goutil v0.4.3/go.mod h1:qlGVh0PI+WnWSjYnIocfz/7tkeogxL6+EDNP1mRe+7o=
 github.com/gookit/gsr v0.0.4 h1:wxwbcwN0iSovauty6IIR2Qi7fM5Ck1NrrDKE1wU9EQ8=
 github.com/gookit/gsr v0.0.4/go.mod h1:oCrmIEBod7DNBBFP5sckUY2yrOmJgNpG3xyxryLyJKY=
 github.com/hashicorp/hcl v1.0.0/go.mod h1:E5yfLk+7swimpb2L/Alb/PJmXilQ/rhwaUYs4T20WEQ=
