@@ -10,7 +10,7 @@ require (
 	github.com/dgryski/go-farm v0.0.0-20200201041132-a6ae2369ad13 // indirect
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/golang/snappy v0.0.1 // indirect
-	github.com/gomodule/redigo v2.0.0+incompatible
+	github.com/gomodule/redigo v1.8.8
 	github.com/gookit/goutil v0.4.2
 	github.com/gookit/gsr v0.0.4
 	github.com/patrickmn/go-cache v2.1.0+incompatible
@@ -20,3 +20,5 @@ require (
 	github.com/tidwall/buntdb v1.2.9
 	go.etcd.io/bbolt v1.3.6
 )
+
+exclude github.com/gomodule/redigo v2.0.0+incompatible
