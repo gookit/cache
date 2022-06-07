@@ -13,8 +13,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        go_version: [1.14, 1.15, 1.16, 1.17]
-        os: [ ubuntu-latest] # , macOS-latest, windows-latest
+        go_version: [ 1.14, 1.15, 1.16, 1.17 ]
+        os: [ ubuntu-latest ] # , macOS-latest, windows-latest
 
     services:
       # https://docs.github.com/en/actions/guides/creating-redis-service-containers
@@ -33,6 +33,24 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go_version }}
+
+      - name: Revive check
+        uses: morphy2k/revive-action@v2.3.1
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        with:
+          # Exclude patterns, separated by semicolons (optional)
+          exclude: "./internal/..."
+
+      - name: Run staticcheck
+        uses: reviewdog/action-staticcheck@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          # Change reviewdog reporter if you need [github-pr-check,github-check,github-pr-review].
+          reporter: github-pr-review
+          # Report all results.
+          filter_mode: nofilter
+          # Exit with 1 when it find at least one finding.
+          fail_on_error: true
 
       - name: Run unit tests
         #      run: go test -v -cover ./...
