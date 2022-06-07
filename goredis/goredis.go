@@ -15,7 +15,7 @@ import (
 // Name driver name
 const Name = "goredis"
 
-// CtxForExec Ctx for exec command
+// CtxForExec default ctx for exec command
 var CtxForExec = context.Background()
 
 // GoRedis struct
@@ -126,7 +126,7 @@ func (c *GoRedis) Set(key string, val interface{}, ttl time.Duration) (err error
 	return c.rdb.SetEX(c.ctx, c.Key(key), val, ttl).Err()
 }
 
-// Del cache by key
+// Del caches by key
 func (c *GoRedis) Del(key string) error {
 	return c.rdb.Del(c.ctx, c.Key(key)).Err()
 }

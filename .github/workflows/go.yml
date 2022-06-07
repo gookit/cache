@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        go_version: [ 1.14, 1.15, 1.16, 1.17 ]
+        go_version: [ 1.15, 1.16, 1.17,1.18 ]
         os: [ ubuntu-latest ] # , macOS-latest, windows-latest
 
     services:
@@ -27,10 +27,10 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-      # https://github.com/actions/setup-go
-      - name: Use Go ${{ matrix.go_version }}
+
+      - name: Setup Go Faster
+        uses: WillAbides/setup-go-faster@v1.7.0
         timeout-minutes: 3
-        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go_version }}
 
