@@ -10,7 +10,7 @@ require (
 	github.com/dgryski/go-farm v0.0.0-20200201041132-a6ae2369ad13 // indirect
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang/snappy v0.0.1 // indirect
-	github.com/gomodule/redigo v1.8.8
+	github.com/gomodule/redigo v1.8.9
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/gookit/goutil v0.5.5
 	github.com/gookit/gsr v0.0.7
