@@ -18,7 +18,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/stretchr/testify v1.8.0
 	github.com/syndtr/goleveldb v1.0.0
-	github.com/tidwall/buntdb v1.2.9
+	github.com/tidwall/buntdb v1.2.10
 	go.etcd.io/bbolt v1.3.6
 )
 
