@@ -1,6 +1,6 @@
 module github.com/gookit/cache
 
-go 1.15
+go 1.16
 
 require (
 	github.com/bluele/gcache v0.0.0-20190518031135-bc40bd653833

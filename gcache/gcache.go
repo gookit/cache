@@ -56,7 +56,7 @@ func (g *GCache) Set(key string, val interface{}, ttl time.Duration) (err error)
 }
 
 // Del cache by key
-func (g GCache) Del(key string) error {
+func (g *GCache) Del(key string) error {
 	g.db.Remove(key)
 	return nil
 }
@@ -76,7 +76,7 @@ func (g *GCache) GetMulti(keys []string) map[string]interface{} {
 }
 
 // SetMulti cache by keys
-func (g GCache) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+func (g *GCache) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
 	for key, val := range values {
 		err = g.db.SetWithExpire(key, val, ttl)
 	}

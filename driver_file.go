@@ -223,11 +223,7 @@ func (c *FileCache) GetFilename(key string) string {
 	str := hex.EncodeToString(h.Sum(nil))
 
 	// return fmt.Sprintf("%s/%s/%s.data", c.cacheDir, str[0:6], c.prefix+str)
-	return strings.Join([]string{
-		c.cacheDir,
-		str[0:6],
-		c.opt.Prefix+str + ".data",
-	}, "/")
+	return strings.Join([]string{c.cacheDir, str[0:6], c.opt.Prefix + str + ".data"}, "/")
 }
 
 // fileExists reports whether the named file or directory exists.
