@@ -19,12 +19,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Go Faster
-        uses: WillAbides/setup-go-faster@v1.7.0
-        timeout-minutes: 3
-        with:
-          go-version: ${{ matrix.go_version }}
-
       - name: Setup ENV
         # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
         run: |
@@ -45,6 +39,6 @@ jobs:
         with:
           name: ${{ env.RELEASE_TAG }}
           tag_name: ${{ env.RELEASE_TAG }}
-          body_path: testdata/changelog.md
+          body_path: changelog.md
           token: ${{ secrets.GITHUB_TOKEN }}
 #          files: macos-chlog.exe
