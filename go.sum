@@ -45,8 +45,8 @@ github.com/gomodule/redigo v1.8.9 h1:Sl3u+2BI/kk+VEatbj0scLdrFhjPmbxOc1myhDP41ws
 github.com/gomodule/redigo v1.8.9/go.mod h1:7ArFNvsTjH8GMMzB4uy1snslv2BwmginuMs06a1uzZE=
 github.com/gookit/color v1.5.2 h1:uLnfXcaFjlrDnQDT+NCBcfhrXqYTx/rcCa6xn01Y8yI=
 github.com/gookit/color v1.5.2/go.mod h1:w8h4bGiHeeBpvQVePTutdbERIUf3oJE5lZ8HM0UgXyg=
-github.com/gookit/goutil v0.5.12 h1:dcgIGLF1uBUTbjz0kBBL0LESMznthetAf1jQwFysNwU=
-github.com/gookit/goutil v0.5.12/go.mod h1:6vhWm/bSYXGE8poqFbFz6IGM7jV2r6qVhyK567SX/AI=
+github.com/gookit/goutil v0.5.13 h1:+eUVAb7Mos7uzEi60BRv7aLnm/apBdqvjQsE13bCT8g=
+github.com/gookit/goutil v0.5.13/go.mod h1:6vhWm/bSYXGE8poqFbFz6IGM7jV2r6qVhyK567SX/AI=
 github.com/gookit/gsr v0.0.8 h1:zmkRYe4irObBAskD9UlZCRf8j5VwhhntlYQaSjrrUQk=
 github.com/gookit/gsr v0.0.8/go.mod h1:Q3CLTuluDDyk9/Du6xM721lG9/LQ3ywZde9bjmHyWA8=
 github.com/hashicorp/hcl v1.0.0/go.mod h1:E5yfLk+7swimpb2L/Alb/PJmXilQ/rhwaUYs4T20WEQ=
