@@ -14,7 +14,7 @@ require (
 	github.com/stretchr/testify v1.8.1
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/tidwall/buntdb v1.2.10
-	go.etcd.io/bbolt v1.3.6
+	go.etcd.io/bbolt v1.3.7
 )
 
 require (
@@ -40,7 +40,7 @@ require (
 	github.com/tidwall/tinyqueue v0.1.1 // indirect
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
 	golang.org/x/net v0.0.0-20220722155237-a158d28d115b // indirect
-	golang.org/x/sys v0.0.0-20220829200755-d48e67d00261 // indirect
+	golang.org/x/sys v0.4.0 // indirect
 	golang.org/x/text v0.5.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
