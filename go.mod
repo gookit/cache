@@ -8,7 +8,7 @@ require (
 	github.com/dgraph-io/badger v1.6.2
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/gomodule/redigo v1.8.9
-	github.com/gookit/goutil v0.6.4
+	github.com/gookit/goutil v0.6.5
 	github.com/gookit/gsr v0.0.8
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/stretchr/testify v1.8.1
