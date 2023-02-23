@@ -3,7 +3,7 @@ module github.com/gookit/cache
 go 1.18
 
 require (
-	github.com/bluele/gcache v0.0.0-20190518031135-bc40bd653833
+	github.com/bluele/gcache v0.0.2
 	github.com/bradfitz/gomemcache v0.0.0-20190913173617-a41fca850d0b
 	github.com/dgraph-io/badger v1.6.2
 	github.com/go-redis/redis/v8 v8.11.5
