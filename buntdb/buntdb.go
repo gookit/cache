@@ -10,6 +10,7 @@ import (
 
 // Name driver name
 const Name = "buntDB"
+
 // Memory open a file that does not persist to disk.
 const Memory = ":memory:"
 
@@ -65,8 +66,8 @@ func (c *BuntDB) Has(key string) bool {
 }
 
 // Get value by key
-func (c *BuntDB) Get(key string) interface{} {
-	var val interface{}
+func (c *BuntDB) Get(key string) any {
+	var val any
 	err := c.db.View(func(tx *buntdb.Tx) error {
 		str, err := tx.Get(key, false)
 		if err != nil {
@@ -83,7 +84,7 @@ func (c *BuntDB) Get(key string) interface{} {
 }
 
 // Set value by key
-func (c *BuntDB) Set(key string, val interface{}, ttl time.Duration) (err error) {
+func (c *BuntDB) Set(key string, val any, ttl time.Duration) (err error) {
 	bts, err := c.MustMarshal(val)
 	if err != nil {
 		return err
@@ -110,8 +111,8 @@ func (c *BuntDB) Del(key string) error {
 }
 
 // GetMulti values by multi key
-func (c *BuntDB) GetMulti(keys []string) map[string]interface{} {
-	results := make(map[string]interface{}, len(keys))
+func (c *BuntDB) GetMulti(keys []string) map[string]any {
+	results := make(map[string]any, len(keys))
 	err := c.db.View(func(tx *buntdb.Tx) error {
 		for _, key := range keys {
 			str, err := tx.Get(key, false)
@@ -119,7 +120,7 @@ func (c *BuntDB) GetMulti(keys []string) map[string]interface{} {
 				return err
 			}
 
-			var val interface{}
+			var val any
 			err = c.UnmarshalTo([]byte(str), &val)
 			if err != nil {
 				return err
@@ -138,7 +139,7 @@ func (c *BuntDB) GetMulti(keys []string) map[string]interface{} {
 }
 
 // SetMulti values by multi key
-func (c *BuntDB) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+func (c *BuntDB) SetMulti(values map[string]any, ttl time.Duration) (err error) {
 	return c.db.Update(func(tx *buntdb.Tx) (err error) {
 		opt := &buntdb.SetOptions{}
 		if ttl > 0 {

@@ -56,14 +56,14 @@ func (c *Redigo) Connect() *Redigo {
  *************************************************************/
 
 // Get value by key
-func (c *Redigo) Get(key string) interface{} {
+func (c *Redigo) Get(key string) any {
 	bts, err := redis.Bytes(c.exec("Get", c.Key(key)))
 
 	return c.Unmarshal(bts, err)
 }
 
 // GetAs get cache and unmarshal to ptr
-func (c *Redigo) GetAs(key string, ptr interface{}) error {
+func (c *Redigo) GetAs(key string, ptr any) error {
 	bts, err := redis.Bytes(c.exec("Get", c.Key(key)))
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func (c *Redigo) GetAs(key string, ptr interface{}) error {
 }
 
 // Set value by key
-func (c *Redigo) Set(key string, val interface{}, ttl time.Duration) (err error) {
+func (c *Redigo) Set(key string, val any, ttl time.Duration) (err error) {
 	val, err = c.Marshal(val)
 	if err != nil {
 		return err
@@ -99,11 +99,11 @@ func (c *Redigo) Has(key string) bool {
 }
 
 // GetMulti values by keys
-func (c *Redigo) GetMulti(keys []string) map[string]interface{} {
+func (c *Redigo) GetMulti(keys []string) map[string]any {
 	conn := c.pool.Get()
 	defer conn.Close()
 
-	args := make([]interface{}, 0, len(keys))
+	args := make([]any, 0, len(keys))
 	for _, key := range keys {
 		args = append(args, c.Key(key))
 	}
@@ -114,7 +114,7 @@ func (c *Redigo) GetMulti(keys []string) map[string]interface{} {
 		return nil
 	}
 
-	values := make(map[string]interface{}, len(keys))
+	values := make(map[string]any, len(keys))
 	for i, val := range list {
 		values[keys[i]] = val
 	}
@@ -123,7 +123,7 @@ func (c *Redigo) GetMulti(keys []string) map[string]interface{} {
 }
 
 // SetMulti values
-func (c *Redigo) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+func (c *Redigo) SetMulti(values map[string]any, ttl time.Duration) (err error) {
 	conn := c.pool.Get()
 	defer conn.Close()
 
@@ -146,7 +146,7 @@ func (c *Redigo) SetMulti(values map[string]interface{}, ttl time.Duration) (err
 
 // DelMulti values by keys
 func (c *Redigo) DelMulti(keys []string) (err error) {
-	args := make([]interface{}, 0, len(keys))
+	args := make([]any, 0, len(keys))
 	for _, key := range keys {
 		args = append(args, c.Key(key))
 	}
@@ -186,7 +186,7 @@ func (c *Redigo) String() string {
 }
 
 // actually do the redis cmds, args[0] must be the key name.
-func (c *Redigo) exec(commandName string, args ...interface{}) (reply interface{}, err error) {
+func (c *Redigo) exec(commandName string, args ...any) (reply any, err error) {
 	if len(args) < 1 {
 		return nil, errors.New("missing required arguments")
 	}

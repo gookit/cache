@@ -2,6 +2,7 @@
 // base on the package: github.com/patrickmn/go-cache
 //
 // Usage:
+//
 //	import "github.com/gookit/cache"
 //
 //	cache.Register(gocache.NewGoCache(0, cache.FiveMinutes))
@@ -63,7 +64,7 @@ func (g *GoCache) Has(key string) bool {
 }
 
 // Get cache by key
-func (g *GoCache) Get(key string) interface{} {
+func (g *GoCache) Get(key string) any {
 	if g.expireManually {
 		g.db.DeleteExpired()
 	}
@@ -73,7 +74,7 @@ func (g *GoCache) Get(key string) interface{} {
 }
 
 // Set cache by key
-func (g *GoCache) Set(key string, val interface{}, ttl time.Duration) error {
+func (g *GoCache) Set(key string, val any, ttl time.Duration) error {
 	g.db.Set(key, val, ttl)
 	return nil
 }
@@ -85,8 +86,8 @@ func (g GoCache) Del(key string) error {
 }
 
 // GetMulti cache by keys
-func (g *GoCache) GetMulti(keys []string) map[string]interface{} {
-	data := make(map[string]interface{}, len(keys))
+func (g *GoCache) GetMulti(keys []string) map[string]any {
+	data := make(map[string]any, len(keys))
 
 	for _, key := range keys {
 		val, ok := g.db.Get(key)
@@ -99,7 +100,7 @@ func (g *GoCache) GetMulti(keys []string) map[string]interface{} {
 }
 
 // SetMulti cache by keys
-func (g GoCache) SetMulti(values map[string]interface{}, ttl time.Duration) error {
+func (g GoCache) SetMulti(values map[string]any, ttl time.Duration) error {
 	for key, val := range values {
 		g.db.Set(key, val, ttl)
 	}

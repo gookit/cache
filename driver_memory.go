@@ -10,7 +10,7 @@ type Item struct {
 	// Exp expire time
 	Exp int64
 	// Val cache value storage
-	Val interface{}
+	Val any
 }
 
 // Expired check whether expired
@@ -44,14 +44,14 @@ func (c *MemoryCache) Has(key string) bool {
 }
 
 // Get cache value by key
-func (c *MemoryCache) Get(key string) interface{} {
+func (c *MemoryCache) Get(key string) any {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
 
 	return c.get(key)
 }
 
-func (c *MemoryCache) get(key string) interface{} {
+func (c *MemoryCache) get(key string) any {
 	if item, ok := c.caches[key]; ok {
 		// check expire time. if has been expired, remove it.
 		if item.Expired() {
@@ -66,14 +66,14 @@ func (c *MemoryCache) get(key string) interface{} {
 }
 
 // Set cache value by key
-func (c *MemoryCache) Set(key string, val interface{}, ttl time.Duration) (err error) {
+func (c *MemoryCache) Set(key string, val any, ttl time.Duration) (err error) {
 	c.lock.Lock()
 	defer c.lock.Unlock()
 
 	return c.set(key, val, ttl)
 }
 
-func (c *MemoryCache) set(key string, val interface{}, ttl time.Duration) (err error) {
+func (c *MemoryCache) set(key string, val any, ttl time.Duration) (err error) {
 	item := &Item{Val: val}
 	if ttl > 0 {
 		item.Exp = time.Now().Unix() + int64(ttl/time.Second)
@@ -100,10 +100,10 @@ func (c *MemoryCache) del(key string) error {
 }
 
 // GetMulti values by multi key
-func (c *MemoryCache) GetMulti(keys []string) map[string]interface{} {
+func (c *MemoryCache) GetMulti(keys []string) map[string]any {
 	c.lock.RLock()
 
-	data := make(map[string]interface{}, len(keys))
+	data := make(map[string]any, len(keys))
 	for _, key := range keys {
 		data[key] = c.get(key)
 	}
@@ -113,7 +113,7 @@ func (c *MemoryCache) GetMulti(keys []string) map[string]interface{} {
 }
 
 // SetMulti values by multi key
-func (c *MemoryCache) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+func (c *MemoryCache) SetMulti(values map[string]any, ttl time.Duration) (err error) {
 	c.lock.Lock()
 	for key, val := range values {
 		if err = c.set(key, val, ttl); err != nil {

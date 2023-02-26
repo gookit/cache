@@ -55,14 +55,14 @@ func (c *FileCache) Has(key string) bool {
 }
 
 // Get value by key
-func (c *FileCache) Get(key string) interface{} {
+func (c *FileCache) Get(key string) any {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
 
 	return c.get(key)
 }
 
-func (c *FileCache) get(key string) interface{} {
+func (c *FileCache) get(key string) any {
 	// read cache from memory
 	if val := c.MemoryCache.get(key); val != nil {
 		return val
@@ -92,14 +92,14 @@ func (c *FileCache) get(key string) interface{} {
 }
 
 // Set value by key
-func (c *FileCache) Set(key string, val interface{}, ttl time.Duration) (err error) {
+func (c *FileCache) Set(key string, val any, ttl time.Duration) (err error) {
 	c.lock.Lock()
 	defer c.lock.Unlock()
 
 	return c.set(key, val, ttl)
 }
 
-func (c *FileCache) set(key string, val interface{}, ttl time.Duration) (err error) {
+func (c *FileCache) set(key string, val any, ttl time.Duration) (err error) {
 	err = c.MemoryCache.set(key, val, ttl)
 	if err != nil {
 		return
@@ -151,11 +151,11 @@ func (c *FileCache) del(key string) error {
 }
 
 // GetMulti values by multi key
-func (c *FileCache) GetMulti(keys []string) map[string]interface{} {
+func (c *FileCache) GetMulti(keys []string) map[string]any {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
 
-	data := make(map[string]interface{}, len(keys))
+	data := make(map[string]any, len(keys))
 	for _, key := range keys {
 		data[key] = c.get(key)
 	}
@@ -164,7 +164,7 @@ func (c *FileCache) GetMulti(keys []string) map[string]interface{} {
 }
 
 // SetMulti values by multi key
-func (c *FileCache) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+func (c *FileCache) SetMulti(values map[string]any, ttl time.Duration) (err error) {
 	c.lock.Lock()
 	defer c.lock.Unlock()
 

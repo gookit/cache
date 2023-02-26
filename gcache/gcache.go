@@ -45,13 +45,13 @@ func (g *GCache) Has(key string) bool {
 }
 
 // Get cache by key
-func (g *GCache) Get(key string) interface{} {
+func (g *GCache) Get(key string) any {
 	val, _ := g.db.Get(key)
 	return val
 }
 
 // Set cache by key
-func (g *GCache) Set(key string, val interface{}, ttl time.Duration) (err error) {
+func (g *GCache) Set(key string, val any, ttl time.Duration) (err error) {
 	return g.db.SetWithExpire(key, val, ttl)
 }
 
@@ -62,8 +62,8 @@ func (g *GCache) Del(key string) error {
 }
 
 // GetMulti cache by keys
-func (g *GCache) GetMulti(keys []string) map[string]interface{} {
-	data := make(map[string]interface{}, len(keys))
+func (g *GCache) GetMulti(keys []string) map[string]any {
+	data := make(map[string]any, len(keys))
 
 	for _, key := range keys {
 		val, err := g.db.Get(key)
@@ -76,7 +76,7 @@ func (g *GCache) GetMulti(keys []string) map[string]interface{} {
 }
 
 // SetMulti cache by keys
-func (g *GCache) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+func (g *GCache) SetMulti(values map[string]any, ttl time.Duration) (err error) {
 	for key, val := range values {
 		err = g.db.SetWithExpire(key, val, ttl)
 	}

@@ -47,7 +47,7 @@ func (c *MemCached) Has(key string) bool {
 }
 
 // Get value by key
-func (c *MemCached) Get(key string) (val interface{}) {
+func (c *MemCached) Get(key string) (val any) {
 	item, err := c.client.Get(c.Key(key))
 	if err != nil {
 		return
@@ -61,7 +61,7 @@ func (c *MemCached) Get(key string) (val interface{}) {
 }
 
 // Set value by key
-func (c *MemCached) Set(key string, val interface{}, ttl time.Duration) (err error) {
+func (c *MemCached) Set(key string, val any, ttl time.Duration) (err error) {
 	bts, err := c.MustMarshal(val)
 	if err != nil {
 		return err
@@ -81,7 +81,7 @@ func (c *MemCached) Del(key string) error {
 }
 
 // GetMulti values by multi key
-func (c *MemCached) GetMulti(keys []string) map[string]interface{} {
+func (c *MemCached) GetMulti(keys []string) map[string]any {
 	keys = c.BuildKeys(keys)
 
 	items, err := c.client.GetMulti(keys)
@@ -89,9 +89,9 @@ func (c *MemCached) GetMulti(keys []string) map[string]interface{} {
 		return nil
 	}
 
-	values := make(map[string]interface{}, len(keys))
+	values := make(map[string]any, len(keys))
 	for key, item := range items {
-		var val interface{}
+		var val any
 		if err := c.UnmarshalTo(item.Value, &val); err != nil {
 			continue
 		}
@@ -103,7 +103,7 @@ func (c *MemCached) GetMulti(keys []string) map[string]interface{} {
 }
 
 // SetMulti values by multi key
-func (c *MemCached) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+func (c *MemCached) SetMulti(values map[string]any, ttl time.Duration) (err error) {
 	for key, val := range values {
 		if err = c.Set(c.Key(key), val, ttl); err != nil {
 			return

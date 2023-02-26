@@ -59,7 +59,8 @@ func (m *Manager) Unregister(name string) int {
 
 // SetDefName set default driver name. alias of DefaultUse()
 // Deprecated
-//  please use DefaultUse() instead it
+//
+//	please use DefaultUse() instead it
 func (m *Manager) SetDefName(driverName string) {
 	m.DefaultUse(driverName)
 }
@@ -145,12 +146,12 @@ func (m *Manager) Has(key string) bool {
 }
 
 // Get value by key
-func (m *Manager) Get(key string) interface{} {
+func (m *Manager) Get(key string) any {
 	return m.Default().Get(key)
 }
 
 // Set value by key
-func (m *Manager) Set(key string, val interface{}, ttl time.Duration) error {
+func (m *Manager) Set(key string, val any, ttl time.Duration) error {
 	return m.Default().Set(key, val, ttl)
 }
 
@@ -160,12 +161,12 @@ func (m *Manager) Del(key string) error {
 }
 
 // GetMulti values by keys
-func (m *Manager) GetMulti(keys []string) map[string]interface{} {
+func (m *Manager) GetMulti(keys []string) map[string]any {
 	return m.Default().GetMulti(keys)
 }
 
 // SetMulti values
-func (m *Manager) SetMulti(mv map[string]interface{}, ttl time.Duration) error {
+func (m *Manager) SetMulti(mv map[string]any, ttl time.Duration) error {
 	return m.Default().SetMulti(mv, ttl)
 }
 

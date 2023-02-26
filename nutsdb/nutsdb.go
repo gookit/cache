@@ -17,11 +17,11 @@ func (c *NutsDB) Has(key string) bool {
 	panic("implement me")
 }
 
-func (c *NutsDB) Get(key string) interface{} {
+func (c *NutsDB) Get(key string) any {
 	panic("implement me")
 }
 
-func (c *NutsDB) Set(key string, val interface{}, ttl time.Duration) (err error) {
+func (c *NutsDB) Set(key string, val any, ttl time.Duration) (err error) {
 	panic("implement me")
 }
 
@@ -29,11 +29,11 @@ func (c *NutsDB) Del(key string) error {
 	panic("implement me")
 }
 
-func (c *NutsDB) GetMulti(keys []string) map[string]interface{} {
+func (c *NutsDB) GetMulti(keys []string) map[string]any {
 	panic("implement me")
 }
 
-func (c *NutsDB) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+func (c *NutsDB) SetMulti(values map[string]any, ttl time.Duration) (err error) {
 	panic("implement me")
 }
 

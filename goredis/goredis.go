@@ -100,14 +100,14 @@ func (c *GoRedis) Has(key string) bool {
 }
 
 // Get cache by key
-func (c *GoRedis) Get(key string) interface{} {
+func (c *GoRedis) Get(key string) any {
 	bts, err := c.rdb.Get(c.ctx, c.Key(key)).Bytes()
 
 	return c.Unmarshal(bts, err)
 }
 
 // GetAs get cache and unmarshal to ptr
-func (c *GoRedis) GetAs(key string, ptr interface{}) error {
+func (c *GoRedis) GetAs(key string, ptr any) error {
 	bts, err := c.rdb.Get(c.ctx, c.Key(key)).Bytes()
 	if err != nil {
 		return err
@@ -117,7 +117,7 @@ func (c *GoRedis) GetAs(key string, ptr interface{}) error {
 }
 
 // Set cache by key
-func (c *GoRedis) Set(key string, val interface{}, ttl time.Duration) (err error) {
+func (c *GoRedis) Set(key string, val any, ttl time.Duration) (err error) {
 	val, err = c.Marshal(val)
 	if err != nil {
 		return err
@@ -132,12 +132,12 @@ func (c *GoRedis) Del(key string) error {
 }
 
 // GetMulti cache by keys
-func (c *GoRedis) GetMulti(keys []string) map[string]interface{} {
+func (c *GoRedis) GetMulti(keys []string) map[string]any {
 	panic("implement me")
 }
 
 // SetMulti cache by keys
-func (c *GoRedis) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+func (c *GoRedis) SetMulti(values map[string]any, ttl time.Duration) (err error) {
 	panic("implement me")
 }
 

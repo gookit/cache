@@ -19,11 +19,11 @@ func (c *BadgerDB) Has(key string) bool {
 	panic("implement me")
 }
 
-func (c *BadgerDB) Get(key string) interface{} {
+func (c *BadgerDB) Get(key string) any {
 	panic("implement me")
 }
 
-func (c *BadgerDB) Set(key string, val interface{}, ttl time.Duration) (err error) {
+func (c *BadgerDB) Set(key string, val any, ttl time.Duration) (err error) {
 	panic("implement me")
 }
 
@@ -31,11 +31,11 @@ func (c *BadgerDB) Del(key string) error {
 	panic("implement me")
 }
 
-func (c *BadgerDB) GetMulti(keys []string) map[string]interface{} {
+func (c *BadgerDB) GetMulti(keys []string) map[string]any {
 	panic("implement me")
 }
 
-func (c *BadgerDB) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+func (c *BadgerDB) SetMulti(values map[string]any, ttl time.Duration) (err error) {
 	panic("implement me")
 }
 

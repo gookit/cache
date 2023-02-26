@@ -9,10 +9,10 @@ import (
 
 type (
 	// MarshalFunc define
-	MarshalFunc func(v interface{}) ([]byte, error)
+	MarshalFunc func(v any) ([]byte, error)
 
 	// UnmarshalFunc define
-	UnmarshalFunc func(data []byte, v interface{}) error
+	UnmarshalFunc func(data []byte, v any) error
 )
 
 // data (Un)marshal func
@@ -20,7 +20,7 @@ var (
 	Marshal   MarshalFunc   = json.Marshal
 	Unmarshal UnmarshalFunc = json.Unmarshal
 
-	errNoMarshal = errors.New("must set Marshal func")
+	errNoMarshal   = errors.New("must set Marshal func")
 	errNoUnmarshal = errors.New("must set Unmarshal func")
 )
 
@@ -47,21 +47,21 @@ type BaseDriver struct {
 
 // WithDebug add option: debug
 func WithDebug(debug bool) func(opt *Option) {
-	return func (opt *Option) {
+	return func(opt *Option) {
 		opt.Debug = debug
 	}
 }
 
 // WithEncode add option: encode
 func WithEncode(encode bool) func(opt *Option) {
-	return func (opt *Option) {
+	return func(opt *Option) {
 		opt.Encode = encode
 	}
 }
 
 // WithPrefix add option: prefix
 func WithPrefix(prefix string) func(opt *Option) {
-	return func (opt *Option) {
+	return func(opt *Option) {
 		opt.Prefix = prefix
 	}
 }
@@ -74,7 +74,7 @@ func (l *BaseDriver) WithOptions(optFns ...func(option *Option)) {
 }
 
 // MustMarshal cache value
-func (l *BaseDriver) MustMarshal(val interface{}) ([]byte, error) {
+func (l *BaseDriver) MustMarshal(val any) ([]byte, error) {
 	if Marshal == nil {
 		return nil, errNoMarshal
 	}
@@ -82,7 +82,7 @@ func (l *BaseDriver) MustMarshal(val interface{}) ([]byte, error) {
 }
 
 // Marshal cache value
-func (l *BaseDriver) Marshal(val interface{}) (interface{}, error) {
+func (l *BaseDriver) Marshal(val any) (any, error) {
 	if l.opt.Encode && Marshal != nil {
 		return Marshal(val)
 	}
@@ -91,7 +91,7 @@ func (l *BaseDriver) Marshal(val interface{}) (interface{}, error) {
 }
 
 // UnmarshalTo cache value
-func (l *BaseDriver) UnmarshalTo(bts []byte, ptr interface{}) error {
+func (l *BaseDriver) UnmarshalTo(bts []byte, ptr any) error {
 	if Unmarshal == nil {
 		return errNoUnmarshal
 	}
@@ -99,13 +99,13 @@ func (l *BaseDriver) UnmarshalTo(bts []byte, ptr interface{}) error {
 }
 
 // Unmarshal cache value
-func (l *BaseDriver) Unmarshal(val []byte, err error) interface{} {
+func (l *BaseDriver) Unmarshal(val []byte, err error) any {
 	if err != nil {
 		l.SetLastErr(err)
 		return nil
 	}
 
-	var newV interface{}
+	var newV any
 	if l.opt.Encode && Unmarshal != nil {
 		err := Unmarshal(val, &newV)
 		l.SetLastErr(err)
@@ -129,23 +129,23 @@ func (l *BaseDriver) BuildKeys(keys []string) []string {
 		return keys
 	}
 
-	rks := make([]string,0, len(keys))
+	rks := make([]string, 0, len(keys))
 
 	for _, key := range keys {
-		rks = append(rks, l.opt.Prefix + key)
+		rks = append(rks, l.opt.Prefix+key)
 	}
 	return rks
 }
 
 // Debugf print an debug message
-func (l *BaseDriver) Debugf(format string, v ...interface{}) {
+func (l *BaseDriver) Debugf(format string, v ...any) {
 	if l.opt.Debug && l.opt.Logger != nil {
 		l.opt.Logger.Printf(format, v...)
 	}
 }
 
 // Logf print an log message
-func (l *BaseDriver) Logf(format string, v ...interface{}) {
+func (l *BaseDriver) Logf(format string, v ...any) {
 	if l.opt.Logger != nil {
 		l.opt.Logger.Printf(format, v...)
 	}

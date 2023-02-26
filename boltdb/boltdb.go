@@ -38,8 +38,8 @@ func (c *BoltDB) Has(key string) bool {
 }
 
 // Get value by key
-func (c *BoltDB) Get(key string) interface{} {
-	var val interface{}
+func (c *BoltDB) Get(key string) any {
+	var val any
 	err := c.db.View(func(tx *bbolt.Tx) error {
 		b := tx.Bucket([]byte(c.Bucket))
 		bs := b.Get([]byte(key))
@@ -58,7 +58,7 @@ func (c *BoltDB) Get(key string) interface{} {
 }
 
 // Set value by key
-func (c *BoltDB) Set(key string, val interface{}, _ time.Duration) (err error) {
+func (c *BoltDB) Set(key string, val any, _ time.Duration) (err error) {
 	bts, err := c.MustMarshal(val)
 	if err != nil {
 		return
@@ -77,12 +77,12 @@ func (c *BoltDB) Del(key string) error {
 }
 
 // GetMulti values by multi key
-func (c *BoltDB) GetMulti(keys []string) map[string]interface{} {
+func (c *BoltDB) GetMulti(keys []string) map[string]any {
 	panic("implement me")
 }
 
 // SetMulti values by multi key
-func (c *BoltDB) SetMulti(values map[string]interface{}, ttl time.Duration) (err error) {
+func (c *BoltDB) SetMulti(values map[string]any, ttl time.Duration) (err error) {
 	panic("implement me")
 }
 

@@ -57,12 +57,12 @@ All cache driver implemented the `cache.Cache` interface. So, You can add any cu
 type Cache interface {
 	// basic operation
 	Has(key string) bool
-	Get(key string) interface{}
-	Set(key string, val interface{}, ttl time.Duration) (err error)
+	Get(key string) any
+	Set(key string, val any, ttl time.Duration) (err error)
 	Del(key string) error
 	// multi operation
-	GetMulti(keys []string) map[string]interface{}
-	SetMulti(values map[string]interface{}, ttl time.Duration) (err error)
+	GetMulti(keys []string) map[string]any
+	SetMulti(values map[string]any, ttl time.Duration) (err error)
 	DelMulti(keys []string) error
 	// clear and close
 	Clear() error

@@ -99,7 +99,8 @@ func UnregisterAll(fn ...func(cache Cache)) int {
 
 // SetDefName set default driver name.
 // Deprecated
-//  please use DefaultUse() instead it
+//
+//	please use DefaultUse() instead it
 func SetDefName(driverName string) {
 	std.DefaultUse(driverName)
 }
@@ -159,12 +160,12 @@ func Has(key string) bool {
 }
 
 // Get value by key
-func Get(key string) interface{} {
+func Get(key string) any {
 	return std.Default().Get(key)
 }
 
 // Set value by key
-func Set(key string, val interface{}, ttl time.Duration) error {
+func Set(key string, val any, ttl time.Duration) error {
 	return std.Default().Set(key, val, ttl)
 }
 
@@ -174,12 +175,12 @@ func Del(key string) error {
 }
 
 // GetMulti values by keys
-func GetMulti(keys []string) map[string]interface{} {
+func GetMulti(keys []string) map[string]any {
 	return std.Default().GetMulti(keys)
 }
 
 // SetMulti values
-func SetMulti(mv map[string]interface{}, ttl time.Duration) error {
+func SetMulti(mv map[string]any, ttl time.Duration) error {
 	return std.Default().SetMulti(mv, ttl)
 }
 
