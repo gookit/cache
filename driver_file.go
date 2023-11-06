@@ -60,12 +60,14 @@ func (c *FileCache) Get(key string) any {
 }
 
 func (c *FileCache) get(key string) any {
-	c.lock.RLock()
-	// read cache from memory
-	if val := c.MemoryCache.get(key); val != nil {
+	if val := func() any {
+		c.lock.RLock()
+		defer c.lock.RUnlock()
+		// read cache from memory
+		return c.MemoryCache.get(key)
+	}(); val != nil {
 		return val
 	}
-	c.lock.RUnlock()
 
 	// read cache from file
 	bs, err := ioutil.ReadFile(c.GetFilename(key))
