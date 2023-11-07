@@ -56,15 +56,15 @@ func (c *FileCache) Has(key string) bool {
 
 // Get value by key
 func (c *FileCache) Get(key string) any {
-	c.lock.RLock()
-	defer c.lock.RUnlock()
-
 	return c.get(key)
 }
 
 func (c *FileCache) get(key string) any {
 	// read cache from memory
-	if val := c.MemoryCache.get(key); val != nil {
+	c.lock.RLock()
+	val := c.MemoryCache.get(key)
+	c.lock.RUnlock()
+	if val != nil {
 		return val
 	}
 
@@ -87,7 +87,9 @@ func (c *FileCache) get(key string) any {
 		return nil
 	}
 
+	c.lock.Lock()
 	c.caches[key] = item // save to memory.
+	c.lock.Unlock()
 	return item.Val
 }
 
