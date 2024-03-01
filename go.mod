@@ -11,7 +11,7 @@ require (
 	github.com/gookit/goutil v0.6.15
 	github.com/gookit/gsr v0.1.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/tidwall/buntdb v1.3.0
 	go.etcd.io/bbolt v1.3.9
