@@ -49,7 +49,7 @@ func TestGoRedis_basic(t *testing.T) {
 
 	assert.False(t, c.Has(key))
 
-	err := c.Set(key, "value", cache.Seconds3)
+	err := c.Set(key, "value", cache.Forever)
 	assert.NoError(t, err)
 
 	assert.True(t, c.Has(key))
