@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/go-redis/redis/v8"
 	"github.com/gookit/cache"
 	"github.com/gookit/gsr"
+	"github.com/redis/go-redis/v9"
 )
 
 // Name driver name
@@ -123,7 +123,7 @@ func (c *GoRedis) Set(key string, val any, ttl time.Duration) (err error) {
 		return err
 	}
 
-	return c.rdb.SetEX(c.ctx, c.Key(key), val, ttl).Err()
+	return c.rdb.SetNX(c.ctx, c.Key(key), val, ttl).Err()
 }
 
 // Del caches by key
