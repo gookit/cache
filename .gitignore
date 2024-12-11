@@ -42,3 +42,4 @@ snap
 local*.sh
 local*.cmd
 /testdata/
+oryxBuildBinary
