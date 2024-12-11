@@ -13,7 +13,7 @@ require (
 	github.com/redis/go-redis/v9 v9.6.1
 	github.com/stretchr/testify v1.8.4
 	github.com/syndtr/goleveldb v1.0.0
-	github.com/tidwall/buntdb v1.3.0
+	github.com/tidwall/buntdb v1.3.2
 	go.etcd.io/bbolt v1.3.10
 )
 
