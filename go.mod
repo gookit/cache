@@ -1,6 +1,7 @@
 module github.com/gookit/cache
 
 go 1.19
+toolchain go1.24.1
 
 require (
 	github.com/bluele/gcache v0.0.2
@@ -10,7 +11,7 @@ require (
 	github.com/gookit/goutil v0.6.18
 	github.com/gookit/gsr v0.1.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/redis/go-redis/v9 v9.7.1
+	github.com/redis/go-redis/v9 v9.7.3
 	github.com/stretchr/testify v1.10.0
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/tidwall/buntdb v1.3.2
