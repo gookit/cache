@@ -16,7 +16,7 @@ require (
 	github.com/stretchr/testify v1.10.0
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/tidwall/buntdb v1.3.2
-	go.etcd.io/bbolt v1.4.1
+	go.etcd.io/bbolt v1.4.2
 )
 
 require (
