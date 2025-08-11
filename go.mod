@@ -12,7 +12,7 @@ require (
 	github.com/gookit/goutil v0.7.0
 	github.com/gookit/gsr v0.1.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/redis/go-redis/v9 v9.12.0
+	github.com/redis/go-redis/v9 v9.12.1
 	github.com/stretchr/testify v1.10.0
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/tidwall/buntdb v1.3.2
