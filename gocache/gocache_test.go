@@ -9,7 +9,7 @@ import (
 	"github.com/gookit/cache/gocache"
 	"github.com/gookit/goutil/dump"
 	"github.com/gookit/goutil/strutil"
-	"github.com/stretchr/testify/assert"
+	"github.com/gookit/goutil/testutil/assert"
 )
 
 func Example() {

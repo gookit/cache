@@ -7,7 +7,7 @@ import (
 	"github.com/gookit/cache"
 	"github.com/gookit/goutil/dump"
 	"github.com/gookit/goutil/strutil"
-	"github.com/stretchr/testify/assert"
+	"github.com/gookit/goutil/testutil/assert"
 )
 
 func TestNewMemoryCache(t *testing.T) {
@@ -150,5 +150,5 @@ func TestDefManager(t *testing.T) {
 	is.NoError(cache.Clear())
 
 	num = cache.UnregisterAll()
-	is.GreaterOrEqual(1, num)
+	is.Gte(num, 1)
 }

@@ -9,12 +9,12 @@ on:
 jobs:
 
   test:
-    name: Test on go ${{ matrix.go_version }} and ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    name: Test on go ${{ matrix.go_version }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        go_version: [ 1.23, 1.22, 1.21, 1.19, '1.20' ]
-        os: [ ubuntu-latest ] # , macOS-latest, windows-latest
+        go_version: [ 1.23, 1.25, 1.24 ]
+        # os: [ ubuntu-latest ] # , macOS-latest, windows-latest
 
     services:
       # https://docs.github.com/en/actions/guides/creating-redis-service-containers
@@ -36,7 +36,6 @@ jobs:
 
       - name: Revive check
         uses: morphy2k/revive-action@v2.7.8
-        if: ${{ matrix.os == 'ubuntu-latest' }}
         with:
           # Exclude patterns, separated by semicolons (optional)
           exclude: "./internal/..."
