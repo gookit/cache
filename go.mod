@@ -8,7 +8,7 @@ require (
 	github.com/bluele/gcache v0.0.2
 	github.com/bradfitz/gomemcache v0.0.0-20250403215159-8d39553ac7cf
 	github.com/dgraph-io/badger v1.6.2
-	github.com/gomodule/redigo v1.9.2
+	github.com/gomodule/redigo v1.9.3
 	github.com/gookit/goutil v0.7.1
 	github.com/gookit/gsr v0.1.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
