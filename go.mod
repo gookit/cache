@@ -1,8 +1,6 @@
 module github.com/gookit/cache
 
-go 1.23.0
-
-toolchain go1.23.1
+go 1.24
 
 require (
 	github.com/bluele/gcache v0.0.2
@@ -12,7 +10,7 @@ require (
 	github.com/gookit/goutil v0.7.5
 	github.com/gookit/gsr v0.1.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/redis/go-redis/v9 v9.17.2
+	github.com/redis/go-redis/v9 v9.19.0
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/tidwall/buntdb v1.3.2
 	go.etcd.io/bbolt v1.4.3
@@ -23,7 +21,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/dgraph-io/ristretto v0.1.1 // indirect
 	github.com/dgryski/go-farm v0.0.0-20200201041132-a6ae2369ad13 // indirect
-	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/golang/glog v1.2.4 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
@@ -36,6 +33,7 @@ require (
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/rtred v0.1.2 // indirect
 	github.com/tidwall/tinyqueue v0.1.1 // indirect
+	go.uber.org/atomic v1.11.0 // indirect
 	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
 	golang.org/x/term v0.30.0 // indirect
