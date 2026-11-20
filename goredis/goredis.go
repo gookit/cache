@@ -123,7 +123,7 @@ func (c *GoRedis) Set(key string, val any, ttl time.Duration) (err error) {
 		return err
 	}
 
-	return c.rdb.SetNX(c.ctx, c.Key(key), val, ttl).Err()
+	return c.rdb.Set(c.ctx, c.Key(key), val, ttl).Err()
 }
 
 // Del caches by key
