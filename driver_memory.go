@@ -143,7 +143,10 @@ func (c *MemoryCache) Close() error {
 
 // Clear all caches
 func (c *MemoryCache) Clear() error {
-	c.caches = nil
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
+	c.caches = make(map[string]*Item)
 	return nil
 }
 

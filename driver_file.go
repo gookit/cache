@@ -208,7 +208,7 @@ func (c *FileCache) Clear() error {
 		}
 	}
 
-	c.caches = nil
+	c.caches = make(map[string]*Item)
 	// clear cache files
 	return os.RemoveAll(c.cacheDir)
 }
