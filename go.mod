@@ -10,7 +10,7 @@ require (
 	github.com/gookit/goutil v0.8.6
 	github.com/gookit/gsr v0.1.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/redis/go-redis/v9 v9.23.0
+	github.com/redis/go-redis/v9 v9.24.0
 	github.com/syndtr/goleveldb v1.0.0
 	github.com/tidwall/buntdb v1.3.2
 	go.etcd.io/bbolt v1.4.3
@@ -35,7 +35,7 @@ require (
 	github.com/tidwall/tinyqueue v0.1.1 // indirect
 	go.uber.org/atomic v1.12.0 // indirect
 	golang.org/x/net v0.38.0 // indirect
-	golang.org/x/sys v0.48.0 // indirect
+	golang.org/x/sys v0.50.0 // indirect
 	golang.org/x/term v0.30.0 // indirect
 	golang.org/x/text v0.23.0 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
